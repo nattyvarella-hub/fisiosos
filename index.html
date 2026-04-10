@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FisioSOS - Prof.ª Natália Varella</title>
+    
+    <link rel="icon" href="icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#7c3aed">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
+        .brand-font { font-family: 'Playfair Display', serif; }
+        
+        .tab-content { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .tab-content.active { display: block; }
+        .sub-tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .sub-tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8b5cf6; }
+        
+        .gradient-header { 
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #db2777 100%); 
+            background-size: 200% 200%; 
+            animation: gradientMove 10s ease infinite; 
+        }
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); }
+                       /* Estilo da mini caixa de critérios (Tooltip) ATUALIZADO */
+        .ims-item .relative {
+            position: relative;
+        }
+
+        .criterion-tooltip {
+            visibility: hidden;
+            width: 260px;
+            background-color: #1e293b; /* slate-800 */
+            color: #fff;
+            text-align: left;
+            border-radius: 12px;
+            padding: 12px;
+            position: absolute;
+            z-index: 999; /* Garante que fica por cima de tudo */
+            bottom: 140%; /* Aparece acima do ícone */
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            font-size: 11px;
+            line-height: 1.4;
+            pointer-events: none; /* Evita que o tooltip atrapalhe cliques futuros */
+        }
+
+        /* Setinha do tooltip */
+        .criterion-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+
+        /* Classe que o JS vai adicionar para mostrar */
+        .criterion-tooltip.visible {
+            visibility: visible;
+            opacity: 1;
+        }        /* Modificador para o tooltip abrir para BAIXO (evitar tampar o menu) */
+        .tooltip-down {
+            bottom: auto !important;
+            top: 140% !important;
+        }
+        .tooltip-down::after {
+            top: auto !important;
+            bottom: 100% !important;
+            border-color: transparent transparent #1e293b transparent !important;
+        }
+
+        
+    </style>
+
+    </style>
+</head>
+
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <header class="gradient-header text-white shadow-lg relative z-20">
+        <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <div class="flex items-center justify-center md:justify-start">
+                <i class="fas fa-life-ring text-4xl md:text-6xl text-yellow-300 mr-4 drop-shadow-md animate-pulse"></i>
+                <div>
+                    <h1 class="brand-font text-4xl md:text-5xl font-black drop-shadow-md tracking-wide">FisioSOS</h1>
+                    <p class="text-sm md:text-base text-white/90 font-bold tracking-widest uppercase mt-1 drop-shadow-sm">Guia Prático de Estágio | Prof.ª Natália Varella</p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center space-x-3 text-white mt-4 md:mt-0 bg-white/20 px-5 py-2.5 rounded-full border border-white/30 shadow-inner">
+                <i class="fas fa-bolt text-yellow-300"></i><span class="font-bold tracking-wide">Prática Baseada em Evidências</span>
+            </div>
+        </div>
+    </header>
+
+        <nav class="glass-nav sticky top-0 z-30 border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-2 py-3">
+            <ul class="flex flex-wrap justify-center gap-2 pb-1">
+                <li><button onclick="switchMainTab('vitais')" id="btn-vitais" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm bg-violet-600 text-white shadow-md transform scale-105 transition-all"><i class="fas fa-heartbeat mr-1"></i>Sinais Vitais</button></li>
+                <li><button onclick="switchMainTab('escalas')" id="btn-escalas" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all"><i class="fas fa-list-ol mr-1"></i>Escalas</button></li>
+                <li><button onclick="switchMainTab('calculadoras')" id="btn-calculadoras" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all"><i class="fas fa-calculator mr-1"></i>Calculadoras</button></li>
+                <li><button onclick="switchMainTab('respiratorio')" id="btn-respiratorio" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all"><i class="fas fa-lungs mr-1"></i>Respiratório</button></li>
+                <li><button onclick="switchMainTab('outros')" id="btn-outros" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all"><i class="fas fa-layer-group mr-1"></i>Extras</button></li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <main class="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 pb-20">
+        
+        <div id="tab-vitais" class="tab-content active">
+            <h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-heartbeat text-rose-500 mr-3"></i>Segurança & Sinais Vitais</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div class="bg-emerald-50 rounded-3xl border-2 border-emerald-100 p-6 md:p-8 relative overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div class="absolute -right-4 -bottom-4 text-emerald-200 opacity-30"><i class="fas fa-info-circle text-9xl"></i></div>
+                    <h3 class="font-black text-2xl text-emerald-800 mb-6 relative z-10">Valores Normais (ACSM)</h3>
+                    <ul class="space-y-4 text-sm font-bold text-emerald-900 uppercase relative z-10">
+                        <li class="flex justify-between items-center border-b border-emerald-200/50 pb-3">Pressão Arterial <span class="bg-white text-emerald-700 px-4 py-1.5 rounded-xl shadow-sm">&lt; 120/80 mmHg</span></li>
+                        <li class="flex justify-between items-center border-b border-emerald-200/50 pb-3">Freq. Cardíaca <span class="bg-white text-emerald-700 px-4 py-1.5 rounded-xl shadow-sm">60 - 100 bpm</span></li>
+                        <li class="flex justify-between items-center border-b border-emerald-200/50 pb-3">Freq. Respiratória <span class="bg-white text-emerald-700 px-4 py-1.5 rounded-xl shadow-sm">12 - 20 irpm</span></li>
+                        <li class="flex justify-between items-center border-b border-emerald-200/50 pb-3">Temperatura <span class="bg-white text-emerald-700 px-4 py-1.5 rounded-xl shadow-sm">36,5 - 37,2 °C</span></li>
+                        <li class="flex justify-between items-center border-b border-emerald-200/50 pb-3">SpO₂ <span class="bg-white text-emerald-700 px-4 py-1.5 rounded-xl shadow-sm">&ge; 95%</span></li>
+                        <li class="flex justify-between items-center">Glicemia (Jejum) <span class="bg-white text-emerald-700 px-4 py-1.5 rounded-xl shadow-sm">70 - 99 mg/dL</span></li>
+                    </ul>
+                </div>
+                
+                <div class="bg-blue-50 rounded-3xl border-2 border-blue-100 p-6 md:p-8 relative overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div class="absolute -right-4 -bottom-4 text-blue-200 opacity-30"><i class="fas fa-shield-alt text-9xl"></i></div>
+                    <h3 class="font-black text-2xl text-blue-800 mb-6 relative z-10">Critérios Segurança (Diretrizes RBTI)</h3>
+                    <ul class="space-y-4 text-sm relative z-10">
+                        <li class="bg-white p-4 rounded-2xl shadow-sm border border-blue-50 flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-xl mr-4"><i class="fas fa-heart text-blue-600 text-xl"></i></div>
+                            <div><strong class="text-blue-900 block mb-1 uppercase font-black text-xs">Cardiovascular</strong>FC 40 a 130 bpm<br>PAS 90 a 180 mmHg<br>PAM 60 a 110 mmHg</div>
+                        </li>
+                        <li class="bg-white p-4 rounded-2xl shadow-sm border border-blue-50 flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-xl mr-4"><i class="fas fa-lungs text-blue-600 text-xl"></i></div>
+                            <div><strong class="text-blue-900 block mb-1 uppercase font-black text-xs">Respiratório</strong>FR 5 a 40 irpm | SpO₂ > 88%<br>Se VM: FiO₂ &lt; 60% e PEEP &lt; 10 cmH₂O</div>
+                        </li>
+                        <li class="bg-white p-4 rounded-2xl shadow-sm border border-blue-50 flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-xl mr-4"><i class="fas fa-brain text-blue-600 text-xl"></i></div>
+                            <div><strong class="text-blue-900 block mb-1 uppercase font-black text-xs">Neurológico</strong>Capaz de entender e cumprir comandos. Sem agitação. Sem elevação da PIC.</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+                <div class="bg-rose-50 rounded-3xl border-2 border-rose-100 p-4 md:p-8 relative overflow-hidden shadow-sm hover:shadow-md transition-shadow w-full max-w-full">
+                <div class="absolute -right-4 -bottom-4 text-rose-200 opacity-30 pointer-events-none"><i class="fas fa-chart-line text-9xl"></i></div>
+                <h3 class="font-black text-xl md:text-2xl text-rose-900 mb-6 relative z-10"><i class="fas fa-heartbeat mr-2"></i>Classificação da PA (Diretrizes Brasileiras de HAS 2025)</h3>
+                
+                <div class="overflow-x-auto relative z-10 w-full custom-scrollbar pb-2">
+                    <table class="w-full text-left border-collapse bg-white rounded-2xl overflow-hidden shadow-sm min-w-[400px]">
+                        <thead>
+                            <tr class="bg-rose-600 text-white text-xs md:text-sm uppercase tracking-wider">
+                                <th class="p-3 md:p-4 font-bold">Classificação</th>
+                                <th class="p-3 md:p-4 font-bold">PAS (mmHg)</th>
+                                <th class="p-3 md:p-4 font-bold">PAD (mmHg)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-xs md:text-sm font-medium text-slate-700 divide-y divide-slate-100">
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-3 md:p-4 text-emerald-600 font-bold">PA Normal</td>
+                                <td class="p-3 md:p-4">&lt; 120</td>
+                                <td class="p-3 md:p-4"><span class="text-[10px] text-slate-400 font-bold uppercase mr-1">e</span> &lt; 80</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-3 md:p-4 text-yellow-600 font-bold">Pré-hipertensão</td>
+                                <td class="p-3 md:p-4">120 - 139</td>
+                                <td class="p-3 md:p-4"><span class="text-[10px] text-slate-400 font-bold uppercase mr-1">e/ou</span> 80 - 89</td>
+                            </tr>
+                            <tr class="bg-orange-50 hover:bg-orange-100 transition-colors">
+                                <td class="p-3 md:p-4 text-orange-600 font-bold">HA Estágio 1</td>
+                                <td class="p-3 md:p-4">140 - 159</td>
+                                <td class="p-3 md:p-4"><span class="text-[10px] text-orange-400 font-bold uppercase mr-1">e/ou</span> 90 - 99</td>
+                            </tr>
+                            <tr class="bg-rose-100 hover:bg-rose-200 transition-colors">
+                                <td class="p-3 md:p-4 text-rose-700 font-bold">HA Estágio 2</td>
+                                <td class="p-3 md:p-4">160 - 179</td>
+                                <td class="p-3 md:p-4"><span class="text-[10px] text-rose-400 font-bold uppercase mr-1">e/ou</span> 100 - 109</td>
+                            </tr>
+                            <tr class="bg-red-100 hover:bg-red-200 transition-colors">
+                                <td class="p-3 md:p-4 text-red-800 font-bold">HA Estágio 3</td>
+                                <td class="p-3 md:p-4">&ge; 180</td>
+                                <td class="p-3 md:p-4"><span class="text-[10px] text-red-400 font-bold uppercase mr-1">e/ou</span> &ge; 110</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="relative z-10 mt-4 bg-white/80 p-4 rounded-xl border border-rose-200 shadow-sm text-[11px] md:text-xs text-slate-600 leading-relaxed">
+                    <strong class="text-rose-800 uppercase block mb-1">Nota de Avaliação:</strong>
+                    A classificação é definida pelo nível mais elevado de PA (sistólica ou diastólica).
+                    <ul class="mt-2 space-y-1 list-disc pl-4 text-rose-900">
+                        <li><strong>HA Sistólica Isolada:</strong> PAS &ge; 140 e PAD &lt; 90 (classifica em Estágio 1, 2 ou 3 pela PAS).</li>
+                        <li><strong>HA Diastólica Isolada:</strong> PAS &lt; 140 e PAD &ge; 90 (classifica em Estágio 1, 2 ou 3 pela PAD).</li>
+                    </ul>
+                </div>
+            </div>
+            </div>
+
+        <div id="tab-escalas" class="tab-content hidden">
+            <h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-list-ol text-violet-500 mr-3"></i>Escalas Interativas</h2>
+            
+            <div class="flex flex-wrap gap-3 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+                <button onclick="switchSubTab('sub-mrc')" class="sub-tab-btn flex-1 min-w-[100px] bg-violet-600 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all">MRC</button>
+                <button onclick="switchSubTab('sub-ims')" class="sub-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">IMS (Mobilidade)</button>
+                <button onclick="switchSubTab('sub-cpot')" class="sub-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">CPOT & Dor</button>
+                <button onclick="switchSubTab('sub-glasgow')" class="sub-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Glasgow</button>
+            </div>
+
+            <div id="sub-mrc" class="sub-tab-content active bg-indigo-50 rounded-3xl border-2 border-indigo-100 p-4 md:p-8 w-full max-w-full">
+                <h3 class="font-black text-2xl text-indigo-900 mb-6 flex items-center"><i class="fas fa-hand-rock mr-3"></i>MRC - Força Muscular</h3>
+                
+                <div class="grid md:grid-cols-2 gap-4 md:gap-8 w-full">
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm w-full">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h4 class="font-black text-indigo-800 uppercase text-sm">Superiores</h4>
+                            <span class="text-xs font-bold text-slate-400">Dir / Esq</span>
+                        </div>
+                        <div class="space-y-3 text-sm font-medium text-slate-700 w-full">
+                            <div class="flex justify-between items-center"><span>Abd. Ombro</span> <div class="flex gap-2"><input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"> <input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"></div></div>
+                            <div class="flex justify-between items-center"><span>Flex. Cotovelo</span> <div class="flex gap-2"><input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"> <input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"></div></div>
+                            <div class="flex justify-between items-center"><span>Ext. Punho</span> <div class="flex gap-2"><input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"> <input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"></div></div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 md:p-6 rounded-2xl shadow-sm w-full">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h4 class="font-black text-indigo-800 uppercase text-sm">Inferiores</h4>
+                            <span class="text-xs font-bold text-slate-400">Dir / Esq</span>
+                        </div>
+                        <div class="space-y-3 text-sm font-medium text-slate-700 w-full">
+                            <div class="flex justify-between items-center"><span>Flex. Quadril</span> <div class="flex gap-2"><input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"> <input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"></div></div>
+                            <div class="flex justify-between items-center"><span>Ext. Joelho</span> <div class="flex gap-2"><input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"> <input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"></div></div>
+                            <div class="flex justify-between items-center"><span>Dorsiflexão</span> <div class="flex gap-2"><input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"> <input type="number" min="0" max="5" value="5" class="w-12 p-1 border-2 border-indigo-200 rounded-lg mrc-input text-center font-bold outline-none" oninput="calcMRC()"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-indigo-600 text-white p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-center shadow-lg font-black gap-4 w-full">
+                    <div class="text-center sm:text-left">
+                        <div class="text-2xl">SCORE: <span id="mrc-result">60</span>/60</div>
+                        <div class="text-sm text-indigo-200 uppercase mt-1">Perda de força: <span id="mrc-perda">0.0</span>%</div>
+                    </div>
+                    <span id="mrc-interp" class="bg-white text-indigo-700 px-4 py-2 rounded-xl text-xs md:text-sm uppercase text-center w-full sm:w-auto">Força Preservada</span>
+                </div>
+
+                <div class="mt-6 bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-indigo-100 w-full">
+                    <h4 class="font-black text-indigo-800 uppercase text-xs mb-3 flex items-center"><i class="fas fa-info-circle mr-2 text-indigo-500"></i>Escala de Oxford (Referência)</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px] md:text-xs text-slate-600">
+                        <div class="flex items-start gap-2"><strong class="bg-indigo-100 text-indigo-800 w-6 h-6 rounded flex items-center justify-center flex-shrink-0">0</strong><span class="pt-1">Nenhuma contração muscular visível.</span></div>
+                        <div class="flex items-start gap-2"><strong class="bg-indigo-100 text-indigo-800 w-6 h-6 rounded flex items-center justify-center flex-shrink-0">1</strong><span class="pt-1">Contração visível/palpável, sem movimento.</span></div>
+                        <div class="flex items-start gap-2"><strong class="bg-indigo-100 text-indigo-800 w-6 h-6 rounded flex items-center justify-center flex-shrink-0">2</strong><span class="pt-1">Movimento ativo, mas <strong>não</strong> vence a gravidade.</span></div>
+                        <div class="flex items-start gap-2"><strong class="bg-indigo-100 text-indigo-800 w-6 h-6 rounded flex items-center justify-center flex-shrink-0">3</strong><span class="pt-1">Movimento ativo <strong>contra</strong> a gravidade.</span></div>
+                        <div class="flex items-start gap-2"><strong class="bg-indigo-100 text-indigo-800 w-6 h-6 rounded flex items-center justify-center flex-shrink-0">4</strong><span class="pt-1">Movimenta contra gravidade + resistência moderada.</span></div>
+                        <div class="flex items-start gap-2"><strong class="bg-indigo-100 text-indigo-800 w-6 h-6 rounded flex items-center justify-center flex-shrink-0">5</strong><span class="pt-1">Força normal contra resistência total.</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sub-ims" class="sub-tab-content hidden bg-cyan-50 rounded-3xl border-2 border-cyan-100 p-6 md:p-8 w-full max-w-full">
+                <h3 class="font-black text-2xl text-cyan-900 mb-6 flex items-center"><i class="fas fa-walking mr-3"></i>IMS - Escala e Progressão Clínica</h3>
+                <div class="space-y-3 overflow-y-auto max-h-[32rem] pr-2 custom-scrollbar w-full">
+                    
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">0</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Passivo no leito</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1" title="Ver critérios de avaliação">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 0:</strong>
+                                    Rolado passivamente ou exercitado passivamente pela equipe, mas não se movimentando ativamente.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Mobilização passiva global (manutenção de ADM), posicionamento terapêutico, cicloergometria passiva e introdução de NMES.</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">1</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Exercícios no leito / Sentar com auxílio</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 1:</strong>
+                                    Qualquer atividade no leito, incluindo rolar, ponte, exercícios ativos, cicloergômetro e exercícios ativo assistidos; sem sair do leito ou sentado à beira do leito.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Elevação da cabeceira (45º a 90º), estímulo ao controle cervical/tronco superior e mobilização ativo-assistida.</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">2</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Transferido passivamente para cadeira</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 2:</strong>
+                                    Transferência para cadeira por meio de guincho, elevador ou passante, sem ortostatismo ou sem sentar à beira do leito.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Pés apoiados no chão (propriocepção plantar), transferências de peso e facilitação neuromuscular (FNP).</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">3</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Sentado s/ apoio (beira leito)</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 3:</strong>
+                                    Pode ser auxiliado pela equipe, mas envolve sentar ativamente à beira do leito e com algum controle de tronco.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Alcance funcional cruzado (deslocar centro de gravidade) e fortalecimento isométrico de core.</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">4</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Ortostatismo (Em pé)</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 4:</strong>
+                                    Sustentação do peso sobre os pés na posição ortostática, com ou sem ajuda. Pode ser considerado o uso do guincho ou prancha ortostática.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Descarga de peso bi/unipodal, mini-agachamentos e controle de equilíbrio estático postural.</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">5</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Transferência cama-cadeira (dando passos)</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 5:</strong>
+                                    Ser capaz de dar passos ou arrastar os pés na posição em pé até a cadeira. Isto envolve transferir ativamente o peso de uma perna para outra para ir até a cadeira.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Treino de senta-levanta, transferência em pivô e manejo de intolerância ortostática.</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">6</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Marcha estacionária (à beira do leito)</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 6:</strong>
+                                    Ser capaz de realizar marcha estacionária erguendo os pés de forma alternada (deve ser capaz de dar no mínimo 4 passos, dois em cada pé), com ou sem auxílio.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Coordenação de tríplice flexão, passos laterais e treino de fase de apoio unipodal.</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">7</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Marcha (auxílio 2+ pessoas)</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 7:</strong>
+                                    O paciente consegue se distanciar pelo menos 5 metros do leito/cadeira com auxílio de 2 ou mais pessoas.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Correção mecânica da fase de balanço/apoio e introdução de andador de rodas sob supervisão máxima.</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">8</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Marcha (auxílio 1 pessoa)</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 8:</strong>
+                                    O paciente consegue se distanciar pelo menos 5 metros do leito/cadeira com auxílio de 1 pessoa.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Aumento do volume (distância), mudança de direção e giros no corredor.</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">9</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Marcha independente c/ dispositivo</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 9:</strong>
+                                    O paciente consegue se distanciar pelo menos 5 metros do leito/cadeira com o uso de dispositivos de marcha, mas sem o auxílio de outra pessoa.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Autonomia com andador/bengala, treino em degraus e desvio de obstáculos.</p>
+                        </div>
+                    </div>
+
+                    <div class="ims-item bg-white p-4 rounded-xl flex items-start gap-4 border border-cyan-100 shadow-sm w-full">
+                        <div class="w-10 h-10 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">10</div>
+                        <div class="flex-1 w-full min-w-0 relative">
+                            <div class="flex items-center gap-2 relative z-10">
+                                <div class="text-sm font-black text-slate-800">Marcha independente (sem auxílio)</div>
+                                <button onclick="toggleImsTooltip(this, event)" class="text-cyan-500 hover:text-cyan-700 transition-colors text-xs p-1">
+                                    <i class="fas fa-question-circle"></i>
+                                </button>
+                                <div class="criterion-tooltip">
+                                    <strong class="block mb-1 text-cyan-300">Critérios IMS 10:</strong>
+                                    O paciente consegue se distanciar pelo menos 5 metros do leito/cadeira sem o uso de dispositivos de marcha ou o auxílio de outra pessoa.
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 mt-1 w-full"><strong class="text-cyan-700">Progressão esperada:</strong> Treinamento resistivo de força global, mudanças de velocidade e simulação de AVDs para alta.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="sub-cpot" class="sub-tab-content hidden bg-rose-50 rounded-3xl border-2 border-rose-100 p-6 md:p-8 w-full max-w-full">
+                
+                <div class="mb-8">
+                    <h3 class="font-black text-2xl text-rose-900 mb-2 text-center flex items-center justify-center"><i class="fas fa-smile-beam mr-3"></i>EVA & Faces</h3>
+                    <p class="text-xs text-rose-700 text-center mb-4 font-bold uppercase tracking-wide">Paciente Comunicativo</p>
+                    
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border-2 border-rose-100">
+                        <div class="flex justify-between items-end text-center">
+                            <div class="flex flex-col items-center w-1/6"><span class="text-3xl md:text-4xl hover:scale-125 transition-transform cursor-pointer">😀</span><span class="font-black text-emerald-600 mt-2">0</span><span class="text-[9px] md:text-xs font-bold text-slate-500 leading-tight">Sem Dor</span></div>
+                            <div class="flex flex-col items-center w-1/6"><span class="text-3xl md:text-4xl hover:scale-125 transition-transform cursor-pointer">🙁</span><span class="font-black text-yellow-500 mt-2">2</span><span class="text-[9px] md:text-xs font-bold text-slate-500 leading-tight">Leve</span></div>
+                            <div class="flex flex-col items-center w-1/6"><span class="text-3xl md:text-4xl hover:scale-125 transition-transform cursor-pointer">😟</span><span class="font-black text-orange-400 mt-2">4</span><span class="text-[9px] md:text-xs font-bold text-slate-500 leading-tight">Incomoda</span></div>
+                            <div class="flex flex-col items-center w-1/6"><span class="text-3xl md:text-4xl hover:scale-125 transition-transform cursor-pointer">😢</span><span class="font-black text-orange-600 mt-2">6</span><span class="text-[9px] md:text-xs font-bold text-slate-500 leading-tight">Forte</span></div>
+                            <div class="flex flex-col items-center w-1/6"><span class="text-3xl md:text-4xl hover:scale-125 transition-transform cursor-pointer">😭</span><span class="font-black text-rose-500 mt-2">8</span><span class="text-[9px] md:text-xs font-bold text-slate-500 leading-tight">Intensa</span></div>
+                            <div class="flex flex-col items-center w-1/6"><span class="text-3xl md:text-4xl hover:scale-125 transition-transform cursor-pointer">😫</span><span class="font-black text-red-700 mt-2">10</span><span class="text-[9px] md:text-xs font-bold text-slate-500 leading-tight">Pior Dor</span></div>
+                        </div>
+                        <div class="h-2 w-full mt-4 rounded-full bg-gradient-to-r from-emerald-400 via-orange-400 to-red-600 opacity-80"></div>
+                    </div>
+                </div>
+
+                <hr class="border-rose-200 mb-8 border-2 rounded-full">
+
+                <div>
+                    <h3 class="font-black text-2xl text-rose-900 mb-2 text-center flex items-center justify-center"><i class="fas fa-procedures mr-3"></i>CPOT</h3>
+                    <p class="text-xs text-rose-700 text-center mb-4 font-bold uppercase tracking-wide">Paciente Sedado ou VM</p>
+                    
+                    <div class="grid grid-cols-1 gap-3 text-sm">
+                        <select id="cpot-1" class="p-3 rounded-xl border-2 border-rose-200 outline-none focus:border-rose-400 font-medium text-slate-700" onchange="calcCPOT()">
+                            <option value="0">Face: Relaxada / Neutra (0)</option>
+                            <option value="1">Face: Tensa / Testa franzida (1)</option>
+                            <option value="2">Face: Careta / Olhos apertados (2)</option>
+                        </select>
+                        <select id="cpot-2" class="p-3 rounded-xl border-2 border-rose-200 outline-none focus:border-rose-400 font-medium text-slate-700" onchange="calcCPOT()">
+                            <option value="0">Corpo: Normal / Sem movimento (0)</option>
+                            <option value="1">Corpo: Proteção / Movimentos lentos (1)</option>
+                            <option value="2">Corpo: Agitação / Puxa tubos (2)</option>
+                        </select>
+                        <select id="cpot-3" class="p-3 rounded-xl border-2 border-rose-200 outline-none focus:border-rose-400 font-medium text-slate-700" onchange="calcCPOT()">
+                            <option value="0">Tensão: Relaxada / Sem resistência (0)</option>
+                            <option value="1">Tensão: Rígida / Resiste à mov. passiva (1)</option>
+                            <option value="2">Tensão: Muito Rígida / Forte resistência (2)</option>
+                        </select>
+                        <select id="cpot-4" class="p-3 rounded-xl border-2 border-rose-200 outline-none focus:border-rose-400 font-medium text-slate-700" onchange="calcCPOT()">
+                            <option value="0">VM/Voz: Tolera VM / Fala normal (0)</option>
+                            <option value="1">VM/Voz: Tosse (tolera) / Geme, suspira (1)</option>
+                            <option value="2">VM/Voz: Briga VM / Grita, chora (2)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mt-6 bg-rose-600 text-white p-5 rounded-2xl flex justify-between items-center shadow-lg">
+                        <span class="font-black text-xl uppercase tracking-widest">Total CPOT</span>
+                        <div class="flex items-center space-x-4">
+                            <span id="cpot-result" class="text-4xl font-black">0</span>
+                            <span id="cpot-interp" class="bg-white text-rose-700 px-4 py-2 rounded-xl font-bold text-sm shadow-sm uppercase tracking-wider">Sem Dor</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="sub-glasgow" class="sub-tab-content hidden bg-yellow-50 rounded-3xl border-2 border-yellow-100 p-6 md:p-8 w-full max-w-full">
+                <h3 class="font-black text-2xl text-yellow-900 mb-2 text-center">Glasgow c/ Reatividade Pupilar (GCS-P)</h3>
+                <p class="text-xs text-yellow-700 text-center mb-6 font-bold uppercase tracking-wide">Atualização Neurocrítica</p>
+                
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-yellow-100">
+                        <label class="block font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Abertura Ocular (O)</label>
+                        <select id="glasgow-o" class="w-full p-2 border-2 border-slate-100 rounded-lg text-sm font-medium focus:border-yellow-400 outline-none" onchange="calcGlasgow()">
+                            <option value="4">4 - Espontânea</option>
+                            <option value="3">3 - Ao som / Comando verbal</option>
+                            <option value="2">2 - À pressão / Estímulo doloroso</option>
+                            <option value="1">1 - Ausente</option>
+                            <option value="0">NT - Não Testável (ex: Edema ocular)</option>
+                        </select>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-yellow-100">
+                        <label class="block font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Resposta Verbal (V)</label>
+                        <select id="glasgow-v" class="w-full p-2 border-2 border-slate-100 rounded-lg text-sm font-medium focus:border-yellow-400 outline-none" onchange="calcGlasgow()">
+                            <option value="5">5 - Orientada</option>
+                            <option value="4">4 - Confusa</option>
+                            <option value="3">3 - Palavras (Inapropriadas)</option>
+                            <option value="2">2 - Sons (Incompreensíveis)</option>
+                            <option value="1">1 - Ausente</option>
+                            <option value="0">NT - Não Testável (ex: Tubo/Traqueo)</option>
+                        </select>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-yellow-100">
+                        <label class="block font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Resposta Motora (M)</label>
+                        <select id="glasgow-m" class="w-full p-2 border-2 border-slate-100 rounded-lg text-sm font-medium focus:border-yellow-400 outline-none" onchange="calcGlasgow()">
+                            <option value="6">6 - Obedece a comandos</option>
+                            <option value="5">5 - Localiza o estímulo</option>
+                            <option value="4">4 - Flexão normal (Fuga)</option>
+                            <option value="3">3 - Flexão anormal (Decorticação)</option>
+                            <option value="2">2 - Extensão (Descerebração)</option>
+                            <option value="1">1 - Ausente</option>
+                            <option value="0">NT - Não Testável</option>
+                        </select>
+                    </div>
+                    <div class="bg-yellow-100 p-4 rounded-xl shadow-sm border-2 border-yellow-300">
+                        <label class="block font-black text-yellow-900 mb-2 text-xs uppercase tracking-wider"><i class="fas fa-eye mr-2"></i>Reatividade Pupilar (P)</label>
+                        <select id="glasgow-p" class="w-full p-2 border-2 border-yellow-200 rounded-lg text-sm font-bold text-yellow-900 focus:border-yellow-500 outline-none bg-white" onchange="calcGlasgow()">
+                            <option value="0">Ambas as pupilas reagem (-0)</option>
+                            <option value="-1">Apenas UMA pupila reage (-1)</option>
+                            <option value="-2">NENHUMA pupila reage (-2)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-2 bg-yellow-500 text-white p-5 rounded-2xl flex flex-col shadow-lg transition-all duration-300" id="glasgow-box">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-black text-xl uppercase tracking-widest">Score GCS-P</span>
+                        <span id="glasgow-result" class="text-4xl font-black">15</span>
+                    </div>
+                    <div class="bg-white/20 p-3 rounded-xl mt-2 text-center">
+                        <div id="glasgow-interp" class="font-black text-lg uppercase tracking-wide">Trauma Leve / Normal</div>
+                        <div id="glasgow-iot" class="text-xs font-black mt-2 text-white bg-red-800 p-2 rounded-lg hidden animate-pulse">
+                            <i class="fas fa-exclamation-triangle mr-1"></i>PERDA DE PROTEÇÃO DE VIA AÉREA: INDICAÇÃO IOT
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+<div id="tab-calculadoras" class="tab-content hidden">
+<h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-calculator text-orange-500 mr-3"></i>Calculadoras Clínicas</h2>
+    
+    <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 w-full">
+
+                <button onclick="switchCalcTab('calc-metab')" class="calc-tab-btn flex-1 min-w-[120px] bg-orange-500 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all">Resp & Metabólico</button>
+                <button onclick="switchCalcTab('calc-forca')" class="calc-tab-btn flex-1 min-w-[120px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Força & Esforço</button>
+                <button onclick="switchCalcTab('calc-geriatria')" class="calc-tab-btn flex-1 min-w-[120px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Geriatria & Funcional</button>
+            </div>
+
+            <div id="calc-metab" class="calc-tab-content active grid md:grid-cols-2 gap-4 md:gap-6 w-full max-w-full">
+                
+                <div class="bg-amber-50 rounded-3xl border-2 border-amber-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-amber-900 mb-4 border-b border-amber-200 pb-2"><i class="fas fa-fire mr-2"></i>TMB (Harris-Benedict)</h3>
+                    
+                    <div class="grid grid-cols-2 gap-2 md:gap-3 mb-4 text-sm w-full">
+                        <select id="tmb-sexo" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-amber-800 outline-none" onchange="calcTMB()">
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                        </select>
+                        <input type="number" id="tmb-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-center outline-none" oninput="calcTMB()">
+                        <input type="number" id="tmb-peso" placeholder="Peso" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-center outline-none" oninput="calcTMB()">
+                        <input type="number" id="tmb-altura" placeholder="Altura" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-center outline-none" oninput="calcTMB()">
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-2xl text-center shadow-inner w-full">
+                        <span class="text-xs font-bold text-slate-500 uppercase">Gasto Energético Basal</span>
+                        <div class="text-3xl font-black text-amber-600 truncate"><span id="res-tmb">0</span> <span class="text-lg">kcal/dia</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-orange-50 rounded-3xl border-2 border-orange-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-orange-900 mb-4 border-b border-orange-200 pb-2"><i class="fas fa-lungs mr-2"></i>VM: Peso Predito</h3>
+                    <div class="flex gap-2 md:gap-3 mb-4 text-sm w-full">
+                        <select id="calc-sexo" class="w-full min-w-0 flex-1 p-2 border-2 border-orange-200 rounded-xl font-bold text-orange-800 outline-none" onchange="calcPeso()"><option value="M">Masculino</option><option value="F">Feminino</option></select>
+                        <input type="number" id="calc-altura" value="170" class="w-full min-w-0 flex-1 p-2 border-2 border-orange-200 rounded-xl font-bold text-center outline-none" oninput="calcPeso()">
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center w-full">
+                        <div class="text-3xl font-black text-orange-600 mb-2 truncate"><span id="res-peso">66.3</span> <span class="text-lg">kg</span></div>
+                        <div class="grid grid-cols-3 gap-1 md:gap-2 text-xs border-t pt-2 w-full">
+                            <div class="truncate"><strong id="res-vc4" class="text-slate-700 text-sm md:text-base block">265</strong>4 ml/kg</div>
+                            <div class="truncate"><strong id="res-vc6" class="text-emerald-600 text-sm md:text-base block">398</strong>6 ml/kg</div>
+                            <div class="truncate"><strong id="res-vc8" class="text-slate-700 text-sm md:text-base block">530</strong>8 ml/kg</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-3xl border-2 border-blue-100 p-4 md:p-6 shadow-sm md:col-span-2 w-full">
+                    <h3 class="font-black text-xl text-blue-900 mb-4 border-b border-blue-200 pb-2"><i class="fas fa-wind mr-2"></i>Índice ROX (CNAF/Extubação)</h3>
+                    <div class="grid grid-cols-3 gap-2 md:gap-3 mb-4 text-sm w-full">
+                        <input type="number" id="rox-spo2" placeholder="SpO2 %" class="w-full min-w-0 p-2 border-2 border-blue-200 rounded-xl font-bold text-center outline-none" oninput="calcROX()">
+                        <input type="number" id="rox-fio2" placeholder="FiO2 %" class="w-full min-w-0 p-2 border-2 border-blue-200 rounded-xl font-bold text-center outline-none" oninput="calcROX()">
+                        <input type="number" id="rox-fr" placeholder="FR" class="w-full min-w-0 p-2 border-2 border-blue-200 rounded-xl font-bold text-center outline-none" oninput="calcROX()">
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center flex flex-col sm:flex-row justify-between items-center gap-3 px-4 w-full">
+                        <div class="text-4xl font-black text-blue-600 truncate"><span id="res-rox">0.00</span></div>
+                        <div id="rox-interp" class="text-xs md:text-sm font-bold bg-slate-100 text-slate-500 py-2 px-3 rounded-xl w-full sm:w-auto truncate">Aguardando dados</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-forca" class="calc-tab-content hidden grid md:grid-cols-2 gap-4 md:gap-6 w-full max-w-full">
+                
+                <div class="bg-purple-50 rounded-3xl border-2 border-purple-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-purple-900 mb-4 border-b border-purple-200 pb-2"><i class="fas fa-dumbbell mr-2"></i>Carga Máxima (1RM)</h3>
+                    <div class="flex gap-2 md:gap-3 mb-4 text-sm w-full">
+                        <input type="number" id="rm-carga" placeholder="Carga (kg)" class="w-full min-w-0 flex-1 p-2 border-2 border-purple-200 rounded-xl font-bold text-center outline-none" oninput="calc1RM()">
+                        <input type="number" id="rm-reps" placeholder="Repetições" class="w-full min-w-0 flex-1 p-2 border-2 border-purple-200 rounded-xl font-bold text-center outline-none" oninput="calc1RM()">
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center w-full">
+                        <div class="text-3xl font-black text-purple-600 mb-2 truncate"><span id="res-1rm">0</span> <span class="text-lg">kg (100%)</span></div>
+                        <div class="grid grid-cols-3 gap-1 md:gap-2 text-xs border-t pt-2 w-full">
+                            <div class="truncate"><strong id="res-rm40" class="text-slate-700 text-sm md:text-base block">0</strong>40%</div>
+                            <div class="truncate"><strong id="res-rm60" class="text-emerald-600 text-sm md:text-base block">0</strong>60%</div>
+                            <div class="truncate"><strong id="res-rm80" class="text-slate-700 text-sm md:text-base block">0</strong>80%</div>
+                        </div>
+                    </div>
+                </div>
+
+                             <div class="bg-indigo-50 rounded-3xl border-2 border-indigo-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-indigo-900 mb-4 border-b border-indigo-200 pb-2"><i class="fas fa-hand-rock mr-2"></i>Handgrip (Dinapenia)</h3>
+                    
+                    <div class="grid grid-cols-3 gap-2 mb-3 text-sm w-full">
+                        <select id="hg-sexo" class="w-full min-w-0 p-2 border-2 border-indigo-200 rounded-lg font-bold text-indigo-800 outline-none" onchange="calcHandgrip()">
+                            <option value="M">Masc</option>
+                            <option value="F">Fem</option>
+                        </select>
+                        <input type="number" id="hg-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-indigo-200 rounded-lg font-bold text-center outline-none" oninput="calcHandgrip()">
+                        <input type="number" id="hg-altura" placeholder="Alt(cm)" class="w-full min-w-0 p-2 border-2 border-indigo-200 rounded-lg font-bold text-center outline-none" oninput="calcHandgrip()">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mb-4 text-sm w-full">
+                        <input type="number" id="hg-dom" placeholder="Dominante" class="w-full min-w-0 p-2 border-2 border-indigo-400 rounded-lg font-black text-center outline-none bg-indigo-100 text-indigo-900 placeholder-indigo-500" oninput="calcHandgrip()">
+                        <input type="number" id="hg-ndom" placeholder="N-Dominante" class="w-full min-w-0 p-2 border-2 border-indigo-400 rounded-lg font-black text-center outline-none bg-indigo-100 text-indigo-900 placeholder-indigo-500" oninput="calcHandgrip()">
+                    </div>
+
+                    <div class="bg-white p-3 md:p-4 rounded-2xl shadow-inner border border-indigo-100 w-full min-w-0">
+                        <div class="text-center mb-3 border-b border-indigo-50 pb-2">
+                            <span class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase mb-1">Predito Normal (Dominante)</span>
+                            <div class="text-2xl md:text-3xl font-black text-slate-700 truncate"><span id="hg-predito">0.0</span> <span class="text-xs md:text-sm text-slate-400">kgf</span></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 text-center mb-3">
+                            <div class="bg-indigo-50 p-2 rounded-xl border border-indigo-100">
+                                <span class="block text-[9px] md:text-[10px] font-bold text-indigo-400 uppercase truncate">Perda Dominante</span>
+                                <div class="text-lg md:text-xl font-black text-indigo-600 truncate"><span id="hg-perda-dom">0</span>%</div>
+                            </div>
+                            <div class="bg-indigo-50 p-2 rounded-xl border border-indigo-100">
+                                <span class="block text-[9px] md:text-[10px] font-bold text-indigo-400 uppercase truncate">Perda N-Dominante</span>
+                                <div class="text-lg md:text-xl font-black text-indigo-600 truncate"><span id="hg-perda-ndom">0</span>%</div>
+                            </div>
+                        </div>
+
+                        <div id="hg-ewgsop" class="text-xs md:text-sm font-black bg-slate-100 text-slate-500 py-2 px-3 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors">
+                            Aguardando dados
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-pink-50 rounded-3xl border-2 border-pink-100 p-4 md:p-6 shadow-sm md:col-span-2 w-full">
+                    <h3 class="font-black text-xl text-pink-900 mb-4 border-b border-pink-200 pb-2"><i class="fas fa-heartbeat mr-2"></i>Zonas de Esforço (FC de Reserva)</h3>
+                    <div class="grid grid-cols-3 gap-2 md:gap-3 mb-4 text-sm w-full">
+                        <input type="number" id="fc-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-pink-200 rounded-xl font-bold text-center outline-none" oninput="calcEsforco()">
+                        <input type="number" id="fc-rep" placeholder="Repouso" class="w-full min-w-0 p-2 border-2 border-pink-200 rounded-xl font-bold text-center outline-none" oninput="calcEsforco()">
+                        <input type="number" id="fc-atual" placeholder="Atual" class="w-full min-w-0 p-2 border-2 border-pink-200 rounded-xl font-bold text-center outline-none" oninput="calcEsforco()">
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center flex flex-col sm:flex-row justify-between items-center gap-3 px-4 w-full">
+                        <div class="text-center sm:text-left w-full sm:w-auto">
+                            <div class="text-xs font-bold text-slate-500 uppercase truncate">Intensidade do Esforço</div>
+                            <div class="text-3xl font-black text-pink-600 truncate"><span id="res-fcr">0</span>% <span class="text-sm text-slate-400">da FCR</span></div>
+                        </div>
+                        <div id="fc-interp" class="text-xs md:text-sm font-bold bg-slate-100 text-slate-500 py-2 px-3 rounded-xl w-full sm:w-auto truncate">Aguardando dados</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calc-geriatria" class="calc-tab-content hidden grid md:grid-cols-2 gap-6">
+                              <div class="bg-teal-50 rounded-3xl border-2 border-teal-100 p-4 md:p-6 shadow-sm w-full max-w-full">
+                    
+                    <div class="flex items-center mb-4 border-b border-teal-200 pb-2 relative z-20 w-full">
+                        <h3 class="font-black text-xl text-teal-900"><i class="fas fa-user-md mr-2"></i>FRAIL Score</h3>
+                        
+                        <div class="relative ml-2">
+                            <button onclick="toggleImsTooltip(this, event)" class="text-teal-500 hover:text-teal-700 transition-colors text-base p-1 flex items-center" title="Entenda a Escala FRAIL">
+                                <i class="fas fa-question-circle"></i>
+                            </button>
+                            <div class="criterion-tooltip tooltip-down" style="width: 270px;">
+                                <strong class="block mb-2 text-teal-300 border-b border-slate-600 pb-1">O que é a Escala FRAIL?</strong>
+                                É um instrumento rápido de rastreio para a <strong>Síndrome de Fragilidade</strong> em idosos. O nome é um acrônimo:<br>
+                                <ul class="mt-2 mb-3 pl-4 list-disc text-slate-200 text-left">
+                                    <li><strong class="text-white">F</strong>atigue (Fadiga)</li>
+                                    <li><strong class="text-white">R</strong>esistance (Subir escadas)</li>
+                                    <li><strong class="text-white">A</strong>mbulation (Caminhar)</li>
+                                    <li><strong class="text-white">I</strong>llnesses (> 5 doenças)</li>
+                                    <li><strong class="text-white">L</strong>oss of weight (Perda de peso)</li>
+                                </ul>
+                                <div class="bg-slate-900 p-2 rounded-lg text-center text-[10px] md:text-xs border border-slate-700">
+                                    <span class="text-emerald-400 font-bold">0:</span> Robusto <span class="text-slate-500 mx-1">|</span> 
+                                    <span class="text-yellow-400 font-bold">1-2:</span> Pré-frágil <span class="text-slate-500 mx-1">|</span> 
+                                    <span class="text-red-400 font-bold">3-5:</span> Frágil
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 text-xs md:text-sm font-medium text-teal-800 w-full">
+                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                            <input type="checkbox" id="fr-1" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                            <span class="leading-tight">Fadiga (Cansado a maior parte do tempo?)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                            <input type="checkbox" id="fr-2" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                            <span class="leading-tight">Resistência (Dificuldade de subir 1 lance de escadas?)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                            <input type="checkbox" id="fr-3" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                            <span class="leading-tight">Deambulação (Dificuldade de andar 1 quarteirão?)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                            <input type="checkbox" id="fr-4" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                            <span class="leading-tight">Comorbidades (Possui 5 ou mais doenças?)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                            <input type="checkbox" id="fr-5" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                            <span class="leading-tight">Perda de Peso (> 5% nos últimos 6 meses?)</span>
+                        </label>
+                    </div>
+
+                    <div class="mt-4 bg-teal-600 text-white p-4 rounded-2xl flex justify-between items-center shadow-lg w-full">
+                        <span class="font-black text-lg md:text-xl">TOTAL: <span id="res-frail">0</span></span>
+                        <span id="frail-interp" class="bg-white text-teal-700 px-3 py-1 rounded-lg text-xs md:text-sm uppercase font-bold text-center">Robusto</span>
+                    </div>
+                </div>
+
+
+                <div class="bg-fuchsia-50 rounded-3xl border-2 border-fuchsia-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-fuchsia-900 mb-4 border-b border-fuchsia-200 pb-2"><i class="fas fa-child mr-2"></i>SARC-CalF (Rastreio Sarcopenia)</h3>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4 w-full">
+                        <div class="bg-white p-2 rounded-xl border border-fuchsia-100 shadow-sm">
+                            <label class="block text-[10px] md:text-xs font-bold text-fuchsia-800 uppercase mb-1">Sexo</label>
+                            <select id="sarc-sexo" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                                <option value="F">Feminino</option>
+                                <option value="M">Masculino</option>
+                            </select>
+                        </div>
+                        <div class="bg-white p-2 rounded-xl border border-fuchsia-100 shadow-sm">
+                            <label class="block text-[10px] md:text-xs font-bold text-fuchsia-800 uppercase mb-1">Circ. Panturrilha (cm)</label>
+                            <input type="number" id="sarc-cp" placeholder="Ex: 32" class="w-full min-w-0 p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-center text-slate-700 outline-none focus:border-fuchsia-400" oninput="calcSarcF()">
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 w-full">
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                            <label class="block mb-2">
+                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">1. Força</strong>
+                                <span class="text-slate-600 font-medium text-xs md:text-sm">O quanto de dificuldade você tem para levantar e carregar 5kg?</span>
+                            </label>
+                            <select id="sarc-1" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                                <option value="0">Nenhuma (0)</option>
+                                <option value="1">Alguma (1)</option>
+                                <option value="2">Muita / Não consegue (2)</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                            <label class="block mb-2">
+                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">2. Ajuda para caminhar</strong>
+                                <span class="text-slate-600 font-medium text-xs md:text-sm">O quanto de dificuldade você tem para atravessar um cômodo?</span>
+                            </label>
+                            <select id="sarc-2" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                                <option value="0">Nenhuma (0)</option>
+                                <option value="1">Alguma (1)</option>
+                                <option value="2">Muita / Usa apoios / Incapaz (2)</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                            <label class="block mb-2">
+                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">3. Levantar da cadeira</strong>
+                                <span class="text-slate-600 font-medium text-xs md:text-sm">O quanto de dificuldade você tem para levantar de uma cama ou cadeira?</span>
+                            </label>
+                            <select id="sarc-3" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                                <option value="0">Nenhuma (0)</option>
+                                <option value="1">Alguma (1)</option>
+                                <option value="2">Muita / Não consegue sem ajuda (2)</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                            <label class="block mb-2">
+                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">4. Subir escadas</strong>
+                                <span class="text-slate-600 font-medium text-xs md:text-sm">O quanto de dificuldade você tem para subir um lance de escadas de 10 degraus?</span>
+                            </label>
+                            <select id="sarc-4" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                                <option value="0">Nenhuma (0)</option>
+                                <option value="1">Alguma (1)</option>
+                                <option value="2">Muita / Não consegue (2)</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                            <label class="block mb-2">
+                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">5. Quedas</strong>
+                                <span class="text-slate-600 font-medium text-xs md:text-sm">Quantas vezes você caiu no último ano?</span>
+                            </label>
+                            <select id="sarc-5" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                                <option value="0">Nenhuma (0)</option>
+                                <option value="1">1 a 3 quedas (1)</option>
+                                <option value="2">4 ou mais quedas (2)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 bg-white p-4 rounded-2xl shadow-inner text-center border border-fuchsia-100 w-full min-w-0">
+                        <span class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase mb-1">Somatório Final</span>
+                        <div class="text-3xl md:text-4xl font-black text-fuchsia-600 mb-2"><span id="sarc-result">0</span> <span class="text-sm text-slate-400">/ 20</span></div>
+                        <div id="sarc-interp" class="text-xs md:text-[13px] font-black bg-emerald-100 text-emerald-700 py-2 px-3 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors">
+                            Sem sinais sugestivos (< 11)
+                        </div>
+                    </div>
+                </div>
+</div> 
+        </div> 
+
+                          <div id="tab-respiratorio" class="tab-content hidden">
+            <h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-lungs text-sky-500 mr-3"></i>Avaliação Respiratória</h2>
+            
+            <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+                <button onclick="switchRespTab('resp-guia')" class="resp-tab-btn flex-1 min-w-[100px] bg-sky-500 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all">Guia & FR</button>
+                <button onclick="switchRespTab('resp-forca')" class="resp-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">PiMáx, PeMáx & Peak Flow</button>
+                <button onclick="switchRespTab('resp-espiro')" class="resp-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Espirometria</button>
+                <button onclick="switchRespTab('resp-cirto')" class="resp-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Cirtometria</button>
+            </div>
+
+            <div id="resp-guia" class="resp-tab-content active grid md:grid-cols-2 gap-6 w-full max-w-full">
+                
+                <div class="bg-teal-50 rounded-3xl border-2 border-teal-100 p-4 md:p-6 shadow-sm md:col-span-2 w-full">
+                    <h3 class="font-black text-xl text-teal-900 mb-4 border-b border-teal-200 pb-2 flex justify-between items-center">
+                        <span><i class="fas fa-stopwatch mr-2"></i>Contador de FR (Tap)</span>
+                        <button onclick="resetFR()" class="text-[10px] md:text-xs bg-teal-200 text-teal-800 px-3 py-1 rounded-full hover:bg-teal-300 transition-colors uppercase font-bold shadow-sm">Resetar</button>
+                    </h3>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-4 md:gap-6 w-full">
+                        <button onclick="tapFR()" class="w-24 h-24 md:w-28 md:h-28 rounded-full bg-teal-500 text-white font-black text-xl shadow-lg border-4 border-teal-200 hover:bg-teal-600 active:scale-95 transition-all flex flex-col items-center justify-center flex-shrink-0">
+                            <i class="fas fa-lungs text-2xl md:text-3xl mb-1"></i>
+                            <span class="text-[10px] md:text-xs uppercase">Tap Insp</span>
+                        </button>
+                        
+                        <div class="flex-1 text-center bg-white p-4 md:p-6 rounded-2xl shadow-inner border border-teal-100 w-full min-w-0">
+                            <span class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 truncate">Frequência Estimada</span>
+                            <div class="text-4xl md:text-5xl font-black text-teal-700 mb-2 truncate"><span id="fr-display">0</span> <span class="text-sm md:text-lg text-slate-400 font-bold">irpm</span></div>
+                            <div id="fr-interp" class="text-xs md:text-sm text-slate-400 font-black uppercase transition-colors truncate">Aguardando taps...</div>
+                        </div>
+                    </div>
+                    <p class="text-[9px] md:text-[10px] text-teal-600 mt-3 text-center italic font-medium">*Toque no botão a cada início de inspiração. O app fará a média do tempo.</p>
+                </div>
+
+                <div class="bg-sky-50 rounded-3xl border-2 border-sky-100 p-4 md:p-6 shadow-sm md:col-span-2 w-full">
+                    <h3 class="font-black text-xl text-sky-900 mb-4 border-b border-sky-200 pb-2"><i class="fas fa-stethoscope mr-2"></i>Gerador de Ausculta (Diretriz ERS)</h3>
+                    <div class="bg-rose-100 text-rose-800 text-[10px] md:text-xs font-bold px-3 py-2 rounded-lg mb-4 flex items-center shadow-sm w-full">
+                        <i class="fas fa-exclamation-triangle mr-2 text-lg flex-shrink-0"></i>
+                        <span>ATENÇÃO: Os termos <strong>"Murmúrio Vesicular"</strong> e <strong>"Estertores"</strong> estão em desuso. Utilize "Sons Pulmonares (SP)" e "Crepitações".</span>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 md:gap-6 w-full">
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-sky-100 shadow-sm w-full min-w-0">
+                            <label class="block text-[10px] md:text-xs font-bold text-sky-800 uppercase mb-2">1. Ventilação (Sons Pulmonares)</label>
+                            <select id="ausc-vent" class="w-full min-w-0 p-2 border-2 border-sky-100 rounded-lg text-[11px] md:text-sm font-medium focus:border-sky-400 outline-none" onchange="gerarAusculta()">
+                                <option value="SP presentes e simétricos">Normal (Presentes e Simétricos)</option>
+                                <option value="SP diminuídos globalmente">Diminuídos globalmente</option>
+                                <option value="SP diminuídos bibasal">Diminuídos bibasal</option>
+                                <option value="SP diminuídos em base Direita">Diminuídos em base Direita</option>
+                                <option value="SP diminuídos em base Esquerda">Diminuídos em base Esquerda</option>
+                                <option value="SP abolidos em base Direita">Abolidos em base Direita</option>
+                                <option value="SP abolidos em base Esquerda">Abolidos em base Esquerda</option>
+                                <option value="SP abolidos em hemitórax Direito">Abolidos em hemitórax Direito</option>
+                                <option value="SP abolidos em hemitórax Esquerdo">Abolidos em hemitórax Esquerdo</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-sky-100 shadow-sm w-full min-w-0">
+                            <label class="block text-[10px] md:text-xs font-bold text-sky-800 uppercase mb-2">2. Ruídos Adventícios</label>
+                            <div class="flex gap-2 w-full">
+                                <select id="ausc-ruido" class="w-full min-w-0 flex-1 p-2 border-2 border-sky-100 rounded-lg text-[11px] md:text-sm font-medium focus:border-sky-400 outline-none" onchange="gerarAusculta()">
+                                    <option value="sem ruídos adventícios">Sem ruídos</option>
+                                    <option value="com crepitações finas">Crepitações Finas</option>
+                                    <option value="com crepitações grossas">Crepitações Grossas</option>
+                                    <option value="com sibilos">Sibilos</option>
+                                    <option value="com roncos">Roncos</option>
+                                </select>
+                                
+                                <select id="ausc-local" class="w-full min-w-0 flex-1 p-2 border-2 border-sky-100 rounded-lg text-[11px] md:text-sm font-medium focus:border-sky-400 outline-none hidden" onchange="gerarAusculta()">
+                                    <option value="esparsos">Esparsos</option>
+                                    <option value="difusos">Difusos</option>
+                                    <option value="em base Direita">Base D</option>
+                                    <option value="em base Esquerda">Base E</option>
+                                    <option value="bibasal">Bibasal</option>
+                                    <option value="em hemitórax Direito">Hemitórax D</option>
+                                    <option value="em hemitórax Esquerdo">Hemitórax E</option>
+                                    <option value="em ápice Direito">Ápice D</option>
+                                    <option value="em ápice Esquerdo">Ápice E</option>
+                                    <option value="em terço médio Direito">Terço Médio D</option>
+                                    <option value="em terço médio Esquerdo">Terço Médio E</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 bg-sky-600 text-white p-4 rounded-xl shadow-md border-l-4 border-yellow-300 w-full min-w-0">
+                        <span class="block text-[10px] font-bold uppercase opacity-80 mb-1">Evolução Pronta (Copie para o prontuário):</span>
+                        <div id="ausc-resultado" class="text-xs md:text-sm font-medium italic select-all cursor-pointer">Ausculta Pulmonar: SP presentes e simétricos, sem ruídos adventícios.</div>
+                    </div>
+                </div>
+<div class="bg-purple-50 rounded-3xl border-2 border-purple-100 p-4 md:p-6 shadow-sm w-full">
+    <div class="flex items-center mb-4 border-b border-purple-200 pb-2 relative z-20 w-full">
+        <h3 class="font-black text-xl text-purple-900"><i class="fas fa-compress-arrows-alt mr-2"></i>Manovacuometria (Neder)</h3>
+        
+        <div class="relative ml-2">
+            <button onclick="toggleImsTooltip(this, event)" class="text-purple-500 hover:text-purple-700 transition-colors text-base p-1" title="Entenda os valores">
+                <i class="fas fa-question-circle"></i>
+            </button>
+            <div class="criterion-tooltip tooltip-down" style="width: 270px;">
+                <strong class="block mb-2 text-purple-300 border-b border-slate-600 pb-1">Predito vs LIN</strong>
+                <p class="text-slate-200 mb-2"><strong>Valor Predito:</strong> É a média esperada para uma pessoa saudável com a mesma idade e sexo.</p>
+                <p class="text-slate-200"><strong>LIN (Limite Inferior):</strong> É o valor mínimo aceitável. Se o paciente estiver abaixo do LIN, confirma-se fraqueza muscular respiratória.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex gap-2 md:gap-3 mb-4 text-sm w-full">
+        <select id="mano-sexo" class="flex-1 w-full min-w-0 p-2 border-2 border-purple-200 rounded-xl font-bold outline-none text-purple-800" onchange="calcMano()">
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+        </select>
+        <input type="number" id="mano-idade" placeholder="Idade" class="flex-1 w-full min-w-0 p-2 border-2 border-purple-200 rounded-xl font-bold text-center outline-none" oninput="calcMano()">
+    </div>
+    
+    <div class="grid grid-cols-2 gap-2 md:gap-4 w-full">
+        <div class="bg-white p-3 md:p-4 rounded-2xl shadow-inner text-center border border-purple-100 w-full">
+            <span class="block text-[10px] font-bold text-slate-500 uppercase mb-1">PImáx Predita</span>
+            <div class="text-2xl font-black text-blue-600 mb-1">-<span id="mano-pi">0</span></div>
+            <div class="text-[9px] font-bold text-slate-400 border-t pt-1">LIN: -<span id="mano-pi-lin">0</span></div>
+        </div>
+        <div class="bg-white p-3 md:p-4 rounded-2xl shadow-inner text-center border border-purple-100 w-full">
+            <span class="block text-[10px] font-bold text-slate-500 uppercase mb-1">PEmáx Predita</span>
+            <div class="text-2xl font-black text-red-500 mb-1">+<span id="mano-pe">0</span></div>
+            <div class="text-[9px] font-bold text-slate-400 border-t pt-1">LIN: +<span id="mano-pe-lin">0</span></div>
+        </div>
+    </div>
+    <p class="text-[9px] text-purple-400 mt-3 italic text-center">*Valores em cmH₂O. Equações de Neder et al. (1999)</p>
+</div>
+
+                <div class="bg-emerald-50 rounded-3xl border-2 border-emerald-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-emerald-900 mb-4 border-b border-emerald-200 pb-2"><i class="fas fa-wind mr-2"></i>Peak Flow (Predito GLI)</h3>
+                    <div class="grid grid-cols-3 gap-2 mb-3 text-sm w-full">
+                        <select id="pf-sexo" class="w-full min-w-0 p-2 border-2 border-emerald-200 rounded-lg font-bold outline-none text-emerald-800" onchange="calcPeakFlow()">
+                            <option value="M">Masc</option>
+                            <option value="F">Fem</option>
+                        </select>
+                        <input type="number" id="pf-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-emerald-200 rounded-lg font-bold text-center outline-none" oninput="calcPeakFlow()">
+                        <input type="number" id="pf-altura" placeholder="Alt(cm)" class="w-full min-w-0 p-2 border-2 border-emerald-200 rounded-lg font-bold text-center outline-none" oninput="calcPeakFlow()">
+                    </div>
+                    <div class="flex gap-2 mb-4 text-sm w-full">
+                        <div class="flex-1 w-full min-w-0 bg-white p-2 border-2 border-emerald-100 rounded-lg text-center shadow-inner flex flex-col justify-center">
+                            <span class="block text-[9px] md:text-[10px] font-bold text-slate-400 uppercase truncate">Predito</span>
+                            <span id="pf-predito-show" class="text-lg md:text-xl font-black text-slate-700 truncate">0</span>
+                        </div>
+                        <input type="number" id="pf-obtido" placeholder="Obtido" class="flex-1 w-full min-w-0 p-2 border-2 border-emerald-400 rounded-lg font-black text-center outline-none bg-emerald-100 text-emerald-900" oninput="calcPeakFlow()">
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center w-full min-w-0">
+                        <div class="text-3xl md:text-4xl font-black text-emerald-600 mb-2 truncate"><span id="pf-porcentagem">0</span>%</div>
+                        <div id="pf-zona" class="text-xs md:text-sm font-black bg-slate-100 text-slate-500 py-2 px-3 rounded-xl uppercase tracking-wider truncate w-full">Aguardando</div>
+                    </div>
+                </div>
+            </div> <div id="resp-espiro" class="resp-tab-content hidden w-full max-w-full">
+                <div class="bg-blue-50 rounded-3xl border-2 border-blue-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-blue-900 mb-4 border-b border-blue-200 pb-2"><i class="fas fa-lungs-virus mr-2"></i>Espirometria (GLI-2012)</h3>
+                    
+                    <div class="grid grid-cols-3 gap-2 md:gap-3 mb-6 text-sm bg-white p-3 md:p-4 rounded-2xl border border-blue-100 w-full">
+                        <div class="col-span-3 text-[10px] md:text-xs font-bold text-blue-600 uppercase mb-1">Dados para Valor Predito</div>
+                        <select id="esp-sexo" class="w-full min-w-0 p-2 border-2 border-blue-100 rounded-lg font-bold outline-none text-blue-800" onchange="calcEspiro()">
+                            <option value="M">Masc</option>
+                            <option value="F">Fem</option>
+                        </select>
+                        <input type="number" id="esp-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-blue-100 rounded-lg font-bold text-center outline-none" oninput="calcEspiro()">
+                        <input type="number" id="esp-altura" placeholder="Alt(cm)" class="w-full min-w-0 p-2 border-2 border-blue-100 rounded-lg font-bold text-center outline-none" oninput="calcEspiro()">
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4 w-full">
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded-xl border border-blue-100 shadow-sm flex items-center justify-between">
+                                <span class="font-black text-blue-800 text-sm md:text-base">CVF Real (L)</span>
+                                <input type="number" id="esp-cvf-real" class="w-20 p-2 border-2 border-blue-200 rounded-lg font-bold text-center outline-none focus:border-blue-500" oninput="calcEspiro()">
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-blue-100 shadow-sm flex items-center justify-between">
+                                <span class="font-black text-blue-800 text-sm md:text-base">VEF1 Real (L)</span>
+                                <input type="number" id="esp-vef1-real" class="w-20 p-2 border-2 border-blue-200 rounded-lg font-bold text-center outline-none focus:border-blue-500" oninput="calcEspiro()">
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-2xl shadow-inner border border-blue-100 flex flex-col justify-center">
+                            <div class="flex justify-between mb-2 pb-2 border-b border-blue-50">
+                                <span class="text-xs font-bold text-slate-500 uppercase">Relação VEF1/CVF</span>
+                                <span id="esp-relacao" class="font-black text-blue-600 text-sm md:text-base">0.00</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-[10px] md:text-xs font-bold text-slate-500 uppercase">CVF Pred / %</span>
+                                <span class="font-black text-slate-700 text-xs md:text-sm"><span id="esp-cvf-pred-val">0.00</span>L (<span id="esp-cvf-perc" class="text-blue-600">0</span>%)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-[10px] md:text-xs font-bold text-slate-500 uppercase">VEF1 Pred / %</span>
+                                <span class="font-black text-slate-700 text-xs md:text-sm"><span id="esp-vef1-pred-val">0.00</span>L (<span id="esp-vef1-perc" class="text-blue-600">0</span>%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="esp-diag-box" class="mt-4 bg-slate-100 text-slate-500 p-4 rounded-2xl text-center shadow-sm font-bold uppercase transition-colors">
+                        <div id="esp-diagnostico" class="text-base md:text-lg">Aguardando Dados</div>
+                        <div id="esp-gravidade" class="text-[10px] md:text-xs mt-1 opacity-90 hidden"></div>
+                    </div>
+                </div>
+            </div> <div id="resp-cirto" class="resp-tab-content hidden w-full max-w-full">
+                <div class="bg-rose-50 rounded-3xl border-2 border-rose-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-rose-900 mb-4 border-b border-rose-200 pb-2"><i class="fas fa-ruler-horizontal mr-2"></i>Cirtometria Torácica</h3>
+                    <p class="text-[10px] md:text-xs text-rose-700 font-bold mb-4 uppercase">Amplitude < 3 cm = Expansibilidade Diminuída</p>
+                    
+                    <div class="space-y-4 w-full">
+                        <div class="bg-white p-3 md:p-4 rounded-xl shadow-sm border border-rose-100 flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full">
+                            <span class="font-black text-rose-800 w-full md:w-24 text-center md:text-left text-sm md:text-base">Axilar</span>
+                            <div class="flex gap-2 w-full flex-1">
+                                <input type="number" id="cirto-ax-insp" placeholder="Insp(cm)" class="w-full min-w-0 flex-1 p-2 border-2 border-rose-100 rounded-lg text-sm text-center outline-none focus:border-rose-400" oninput="calcCirto()">
+                                <input type="number" id="cirto-ax-exp" placeholder="Exp(cm)" class="w-full min-w-0 flex-1 p-2 border-2 border-rose-100 rounded-lg text-sm text-center outline-none focus:border-rose-400" oninput="calcCirto()">
+                            </div>
+                            <div class="w-full md:w-32 text-center bg-rose-50 rounded-lg p-2 font-black text-rose-600 text-sm md:text-base truncate">Amp: <span id="cirto-ax-amp">0</span> cm</div>
+                            <div id="cirto-ax-interp" class="w-full md:w-32 text-center text-[10px] font-bold uppercase py-2 rounded-lg bg-slate-100 text-slate-400">---</div>
+                        </div>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl shadow-sm border border-rose-100 flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full">
+                            <span class="font-black text-rose-800 w-full md:w-24 text-center md:text-left text-sm md:text-base">Xifoide</span>
+                            <div class="flex gap-2 w-full flex-1">
+                                <input type="number" id="cirto-xi-insp" placeholder="Insp(cm)" class="w-full min-w-0 flex-1 p-2 border-2 border-rose-100 rounded-lg text-sm text-center outline-none focus:border-rose-400" oninput="calcCirto()">
+                                <input type="number" id="cirto-xi-exp" placeholder="Exp(cm)" class="w-full min-w-0 flex-1 p-2 border-2 border-rose-100 rounded-lg text-sm text-center outline-none focus:border-rose-400" oninput="calcCirto()">
+                            </div>
+                            <div class="w-full md:w-32 text-center bg-rose-50 rounded-lg p-2 font-black text-rose-600 text-sm md:text-base truncate">Amp: <span id="cirto-xi-amp">0</span> cm</div>
+                            <div id="cirto-xi-interp" class="w-full md:w-32 text-center text-[10px] font-bold uppercase py-2 rounded-lg bg-slate-100 text-slate-400">---</div>
+                        </div>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl shadow-sm border border-rose-100 flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full">
+                            <span class="font-black text-rose-800 w-full md:w-24 text-center md:text-left text-sm md:text-base">Umbilical</span>
+                            <div class="flex gap-2 w-full flex-1">
+                                <input type="number" id="cirto-um-insp" placeholder="Insp(cm)" class="w-full min-w-0 flex-1 p-2 border-2 border-rose-100 rounded-lg text-sm text-center outline-none focus:border-rose-400" oninput="calcCirto()">
+                                <input type="number" id="cirto-um-exp" placeholder="Exp(cm)" class="w-full min-w-0 flex-1 p-2 border-2 border-rose-100 rounded-lg text-sm text-center outline-none focus:border-rose-400" oninput="calcCirto()">
+                            </div>
+                            <div class="w-full md:w-32 text-center bg-rose-50 rounded-lg p-2 font-black text-rose-600 text-sm md:text-base truncate">Amp: <span id="cirto-um-amp">0</span> cm</div>
+                            <div id="cirto-um-interp" class="w-full md:w-32 text-center text-[10px] font-bold uppercase py-2 rounded-lg bg-slate-100 text-slate-400">---</div>
+                        </div>
+                    </div>
+                </div>
+            </div> </div> 
+            
+        </div>   <div id="tab-outros" class="tab-content hidden">
+            <h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-layer-group text-fuchsia-500 mr-3"></i>Módulo Extras</h2>
+          
+            <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+                <button onclick="switchExtrasTab('extras-neuro')" class="extras-tab-btn flex-1 bg-fuchsia-600 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all">Miótomos & Dermátomos</button>
+                <button onclick="switchExtrasTab('extras-sna')" class="extras-tab-btn flex-1 bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Anatomia SNA</button>
+                <button onclick="switchExtrasTab('extras-tampa')" class="extras-tab-btn flex-1 bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Escala de Tampa</button>
+            </div>
+
+            <div id="extras-neuro" class="extras-tab-content active grid md:grid-cols-2 gap-6">
+                <div class="bg-purple-50 rounded-3xl border-2 border-purple-100 p-6 shadow-sm">
+                    <h3 class="font-black text-xl text-purple-900 mb-4 border-b border-purple-200 pb-2"><i class="fas fa-running mr-2"></i>Miótomos (Raiz e Teste)</h3>
+                    <div class="space-y-2 text-xs font-medium text-purple-900">
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C5</strong> <span>Abdução do Ombro</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C6</strong> <span>Flexão de Cotovelo / Ext. Punho</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C7</strong> <span>Extensão de Cotovelo / Flex. Punho</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C8</strong> <span>Flexão dos Dedos / Ext. Polegar</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">T1</strong> <span>Abdução dos Dedos</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between mt-4"><strong class="w-10 text-purple-700">L2</strong> <span>Flexão de Quadril</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">L3</strong> <span>Extensão de Joelho</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">L4</strong> <span>Dorsiflexão do Tornozelo</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">L5</strong> <span>Extensão do Hálux</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">S1</strong> <span>Flexão Plantar (Eversão)</span></div>
+                    </div>
+                </div>
+                <div class="bg-indigo-50 rounded-3xl border-2 border-indigo-100 p-6 shadow-sm flex flex-col">
+                    <h3 class="font-black text-xl text-indigo-900 mb-4 border-b border-indigo-200 pb-2"><i class="fas fa-male mr-2"></i>Mapa de Dermátomos (Zonas)</h3>
+                    <div class="flex-1 bg-white rounded-xl shadow-sm border border-indigo-100 p-4">
+                        <div class="space-y-3 w-full text-xs md:text-sm">
+                            <div class="flex items-center border-l-4 border-blue-500 bg-blue-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-blue-700">C2-C4</div>
+                                <div class="flex-1 text-blue-900 font-medium">Nuca, pescoço e região clavicular ("colar" cervical).</div>
+                            </div>
+                            <div class="flex items-center border-l-4 border-purple-500 bg-purple-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-purple-700">C5-T1</div>
+                                <div class="flex-1 text-purple-900 font-medium"><strong>C5:</strong> Ombro lateral. <strong>C6:</strong> Polegar. <strong>C7:</strong> Dedo médio. <strong>C8:</strong> Dedo mínimo. <strong>T1:</strong> Antebraço medial.</div>
+                            </div>
+                            <div class="flex items-center border-l-4 border-emerald-500 bg-emerald-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-emerald-700">T4-T12</div>
+                                <div class="flex-1 text-emerald-900 font-medium"><strong>T4:</strong> Linha dos mamilos. <strong>T10:</strong> Cicatriz umbilical. <strong>T12:</strong> Região suprapúbica.</div>
+                            </div>
+                            <div class="flex items-center border-l-4 border-orange-500 bg-orange-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-orange-700">L1-L5</div>
+                                <div class="flex-1 text-orange-900 font-medium"><strong>L1:</strong> Virilha. <strong>L3:</strong> Joelho medial. <strong>L4:</strong> Maléolo medial. <strong>L5:</strong> Dorso do pé / Hálux.</div>
+                            </div>
+                            <div class="flex items-center border-l-4 border-rose-500 bg-rose-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-rose-700">S1-S5</div>
+                                <div class="flex-1 text-rose-900 font-medium"><strong>S1:</strong> Borda lateral do pé. <strong>S2:</strong> Fossa poplítea. <strong>S3-S5:</strong> Região perineal ("Sela").</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        <div id="tab-outros" class="tab-content hidden">
+            <h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-layer-group text-fuchsia-500 mr-3"></i>Módulo Extras</h2>
+          
+            <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+                <button onclick="switchExtrasTab('extras-neuro')" class="extras-tab-btn flex-1 bg-fuchsia-600 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all">Miótomos & Dermátomos</button>
+                <button onclick="switchExtrasTab('extras-sna')" class="extras-tab-btn flex-1 bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Anatomia SNA</button>
+                <button onclick="switchExtrasTab('extras-tampa')" class="extras-tab-btn flex-1 bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Escala de Tampa</button>
+            </div>
+
+            <div id="extras-neuro" class="extras-tab-content active grid md:grid-cols-2 gap-6 w-full max-w-full">
+                <div class="bg-purple-50 rounded-3xl border-2 border-purple-100 p-6 shadow-sm">
+                    <h3 class="font-black text-xl text-purple-900 mb-4 border-b border-purple-200 pb-2"><i class="fas fa-running mr-2"></i>Miótomos (Raiz e Teste)</h3>
+                    <div class="space-y-2 text-xs font-medium text-purple-900">
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C5</strong> <span>Abdução do Ombro</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C6</strong> <span>Flexão de Cotovelo / Ext. Punho</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C7</strong> <span>Extensão de Cotovelo / Flex. Punho</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C8</strong> <span>Flexão dos Dedos / Ext. Polegar</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">T1</strong> <span>Abdução dos Dedos</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between mt-4"><strong class="w-10 text-purple-700">L2</strong> <span>Flexão de Quadril</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">L3</strong> <span>Extensão de Joelho</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">L4</strong> <span>Dorsiflexão do Tornozelo</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">L5</strong> <span>Extensão do Hálux</span></div>
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">S1</strong> <span>Flexão Plantar (Eversão)</span></div>
+                    </div>
+                </div>
+                <div class="bg-indigo-50 rounded-3xl border-2 border-indigo-100 p-6 shadow-sm flex flex-col">
+                    <h3 class="font-black text-xl text-indigo-900 mb-4 border-b border-indigo-200 pb-2"><i class="fas fa-male mr-2"></i>Mapa de Dermátomos (Zonas)</h3>
+                    <div class="flex-1 bg-white rounded-xl shadow-sm border border-indigo-100 p-4">
+                        <div class="space-y-3 w-full text-xs md:text-sm">
+                            <div class="flex items-center border-l-4 border-blue-500 bg-blue-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-blue-700">C2-C4</div>
+                                <div class="flex-1 text-blue-900 font-medium">Nuca, pescoço e região clavicular ("colar" cervical).</div>
+                            </div>
+                            <div class="flex items-center border-l-4 border-purple-500 bg-purple-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-purple-700">C5-T1</div>
+                                <div class="flex-1 text-purple-900 font-medium"><strong>C5:</strong> Ombro lateral. <strong>C6:</strong> Polegar. <strong>C7:</strong> Dedo médio. <strong>C8:</strong> Dedo mínimo. <strong>T1:</strong> Antebraço medial.</div>
+                            </div>
+                            <div class="flex items-center border-l-4 border-emerald-500 bg-emerald-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-emerald-700">T4-T12</div>
+                                <div class="flex-1 text-emerald-900 font-medium"><strong>T4:</strong> Linha dos mamilos. <strong>T10:</strong> Cicatriz umbilical. <strong>T12:</strong> Região suprapúbica.</div>
+                            </div>
+                            <div class="flex items-center border-l-4 border-orange-500 bg-orange-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-orange-700">L1-L5</div>
+                                <div class="flex-1 text-orange-900 font-medium"><strong>L1:</strong> Virilha. <strong>L3:</strong> Joelho medial. <strong>L4:</strong> Maléolo medial. <strong>L5:</strong> Dorso do pé / Hálux.</div>
+                            </div>
+                            <div class="flex items-center border-l-4 border-rose-500 bg-rose-50 p-3 rounded-r-lg shadow-sm">
+                                <div class="w-16 font-black text-rose-700">S1-S5</div>
+                                <div class="flex-1 text-rose-900 font-medium"><strong>S1:</strong> Borda lateral do pé. <strong>S2:</strong> Fossa poplítea. <strong>S3-S5:</strong> Região perineal ("Sela").</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="extras-sna" class="extras-tab-content hidden grid md:grid-cols-2 gap-6 w-full max-w-full">
+                
+                <div class="bg-rose-50 rounded-3xl border-2 border-rose-100 p-4 md:p-6 shadow-sm flex flex-col max-h-[600px] w-full">
+                    <h3 class="font-black text-xl text-rose-900 mb-4 border-b border-rose-200 pb-2 flex-shrink-0"><i class="fas fa-fire mr-2"></i>Simpático (Tóraco-Lombar)</h3>
+                    <div class="overflow-y-auto pr-2 custom-scrollbar space-y-3 text-xs md:text-sm">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-rose-100">
+                            <strong class="block text-rose-800 text-sm uppercase mb-1">Gânglios Cervicais (Sup, Médio e Estrelado)</strong>
+                            <p class="text-slate-600 mb-2"><span class="font-bold text-rose-600">Origem Real:</span> Segmentos medulares <strong>T1 a T4</strong>. As fibras pré-ganglionares <em>sobem</em> pela cadeia laterovertebral para fazer sinapse nos gânglios cervicais.</p>
+                            <p class="text-slate-600 mb-2"><span class="font-bold text-rose-600">Inerva:</span> Olho (midríase), glândulas (inibe secreção) e compõe o plexo cardíaco/pulmonar.</p>
+                        </div>
+                        <div class="bg-rose-100 p-4 rounded-xl shadow-sm border-2 border-rose-300">
+                            <strong class="block text-rose-900 text-sm uppercase mb-2"><i class="fas fa-heartbeat mr-1"></i> Coração (Plexo Cardíaco Simpático)</strong>
+                            <ul class="list-disc pl-4 space-y-1 text-rose-800 font-medium">
+                                <li><strong>Via:</strong> Fibras pós-ganglionares dos gânglios cervicais e torácicos superiores (T1-T4/T5).</li>
+                                <li><strong>Alvos:</strong> Nodo Sinoatrial (SA), Nodo Atrioventricular (AV) e <strong>Miocárdio Ventricular</strong> (abundante).</li>
+                                <li><strong>Efeito:</strong> <span class="font-bold">Cronotropismo +</span> (aumenta FC no SA), <span class="font-bold">Dromotropismo +</span> (acelera condução no AV) e <span class="font-bold">Inotropismo +</span> (aumenta força ventricular).</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-rose-100">
+                            <strong class="block text-rose-800 text-sm uppercase mb-1">Nervos Esplâncnicos (T5 - L2)</strong>
+                            <p class="text-slate-600 mb-2"><span class="font-bold text-rose-600">Gânglios Pré-aórticos:</span> Celíaco, Mesentérico Superior e Inferior.</p>
+                            <p class="text-slate-700 font-bold bg-rose-50 p-2 rounded-lg">Função: Vasoconstrição esplâncnica, glicogenólise hepática, contração de esfíncteres GI e urinários, inibição do peristaltismo.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-rose-100 border-l-4 border-l-rose-600">
+                            <strong class="block text-rose-800 text-sm uppercase mb-1">Gânglio Ímpar (ou Gânglio de Walther)</strong>
+                            <p class="text-slate-600"><span class="font-bold text-rose-600">Localização:</span> Anterior à junção sacrococcígea. É o ponto final onde os dois troncos simpáticos (D e E) se fundem.</p>
+                            <p class="text-slate-700 font-bold bg-rose-50 p-2 rounded-lg mt-2">Inerva: Períneo, porção distal do reto, canal anal e genitália (tônus vascular).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-teal-50 rounded-3xl border-2 border-teal-100 p-4 md:p-6 shadow-sm flex flex-col max-h-[600px] w-full">
+                    <h3 class="font-black text-xl text-teal-900 mb-4 border-b border-teal-200 pb-2 flex-shrink-0"><i class="fas fa-leaf mr-2"></i>Parassimpático (Crânio-Sacral)</h3>
+                    <div class="overflow-y-auto pr-2 custom-scrollbar space-y-3 text-xs md:text-sm">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-teal-100">
+                            <strong class="block text-teal-800 text-sm uppercase mb-1">Pares Cranianos (Tronco Encefálico)</strong>
+                            <p class="text-slate-600 mb-1"><span class="font-bold text-teal-600">NC III (G. Ciliar):</span> Miose pupilar e acomodação do cristalino.</p>
+                            <p class="text-slate-600 mb-1"><span class="font-bold text-teal-600">NC VII (G. Pterigopalatino/Submandibular):</span> Lacrimejamento e salivação.</p>
+                            <p class="text-slate-600"><span class="font-bold text-teal-600">NC IX (G. Ótico):</span> Salivação parotídea.</p>
+                        </div>
+                        <div class="bg-teal-100 p-4 rounded-xl shadow-sm border-2 border-teal-300">
+                            <strong class="block text-teal-900 text-sm uppercase mb-2"><i class="fas fa-heartbeat mr-1"></i> Coração (Nervo Vago - NC X)</strong>
+                            <ul class="list-disc pl-4 space-y-1 text-teal-800 font-medium">
+                                <li><strong>Via:</strong> Fibras pré-ganglionares do Vago fazem sinapse em gânglios na própria parede cardíaca.</li>
+                                <li><strong>Alvos Específicos:</strong> O Vago Direito inerva predominantemente o <strong>Nodo SA</strong>. O Vago Esquerdo inerva predominantemente o <strong>Nodo AV</strong>. *(Há pouquíssima inervação vagal nos ventrículos).*</li>
+                                <li><strong>Efeito:</strong> <span class="font-bold">Cronotropismo -</span> (bradicardia no SA) e <span class="font-bold">Dromotropismo -</span> (atraso da condução no AV para enchimento ventricular).</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-teal-100">
+                            <strong class="block text-teal-800 text-sm uppercase mb-1">Vísceras Torácicas e Abdominais (Vago)</strong>
+                            <p class="text-slate-700 font-bold bg-teal-50 p-2 rounded-lg">Função: Broncoconstrição, aumento de secreção brônquica, estimula peristaltismo e secreção gástrica/pancreática (até flexura esplênica do cólon).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-teal-100">
+                            <strong class="block text-teal-800 text-sm uppercase mb-1">Pélvico (S2 a S4 - N. Esplâncnicos Pélvicos)</strong>
+                            <p class="text-slate-600"><span class="font-bold text-teal-600">Inerva:</span> Cólon descendente, sigmoide, reto, bexiga e genitália.</p>
+                            <p class="text-slate-700 font-bold bg-teal-50 p-2 rounded-lg mt-2">Função: Contrai músculo detrusor (micção), relaxa esfíncter interno, promove ereção (vasodilatação).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="extras-tampa" class="extras-tab-content hidden w-full max-w-full">
+                <div class="bg-amber-50 rounded-3xl border-2 border-amber-100 p-4 md:p-6 shadow-sm w-full">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-amber-200 pb-4 w-full">
+                        <div>
+                            <h3 class="font-black text-2xl text-amber-900"><i class="fas fa-running mr-2 text-amber-600"></i>Escala de Tampa (TSK-17)</h3>
+                            <p class="text-[10px] md:text-xs text-amber-700 font-bold uppercase mt-1">Avaliação de Cinesiofobia (Medo do Movimento)</p>
+                        </div>
+                        <div class="mt-4 md:mt-0 bg-amber-600 text-white px-4 py-3 rounded-2xl flex items-center shadow-lg w-full md:w-auto justify-center">
+                            <span class="font-black uppercase text-sm mr-2 md:mr-4">Escore:</span>
+                            <span id="tampa-resultado" class="text-2xl md:text-3xl font-black mr-2 md:mr-4">17</span>
+                            <span id="tampa-interp" class="bg-white text-amber-700 px-3 py-1 rounded-lg text-[10px] uppercase font-bold text-center leading-tight">Cinesiofobia<br>Baixa</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-amber-100 overflow-y-auto max-h-[400px] custom-scrollbar w-full">
+                        <div class="text-[9px] md:text-[10px] font-bold text-slate-400 flex justify-end mb-2 pr-2">1: Discordo Tot. | 2: Discordo Parc. | 3: Concordo Parc. | 4: Concordo Tot.</div>
+                        <div class="space-y-2 text-xs md:text-sm font-medium text-amber-900 w-full" id="tampa-questions">
+                            </div>
+                        <p class="text-[9px] md:text-[10px] text-amber-600 font-bold mt-4 italic text-center">*As questões 4, 8, 11 e 12 possuem pontuação invertida automaticamente pelo sistema.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>       
+    </main>
+
+    <script>
+        // Função para trocar abas principais do Menu
+        function switchMainTab(id) {
+            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+            document.querySelectorAll('.main-tab-btn').forEach(e => e.className = "main-tab-btn px-6 py-3 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all");
+            document.getElementById('tab-'+id).classList.add('active');
+            document.getElementById('btn-'+id).className = "main-tab-btn px-6 py-3 rounded-full font-bold text-sm bg-violet-600 text-white shadow-md transform scale-105 transition-all";
+        }
+
+        // Função para trocar as sub-abas das Escalas
+        function switchSubTab(id) {
+            document.querySelectorAll('.sub-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+                btn.className = "sub-tab-btn flex-1 bg-slate-100 text-slate-600 px-5 py-3 rounded-xl text-sm font-bold transition-all";
+            });
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.className = "sub-tab-btn flex-1 bg-violet-600 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-md transition-all";
+        }
+
+        // Cálculo MRC
+                function calcMRC() {
+            let total = 0;
+            // Soma todos os inputs
+            document.querySelectorAll('.mrc-input').forEach(input => {
+                // Garante que valores vazios ou absurdos não quebrem a conta
+                let val = Number(input.value) || 0;
+                if (val > 5) val = 5; 
+                if (val < 0) val = 0;
+                total += val;
+            });
+            
+            // Atualiza o total
+            document.getElementById('mrc-result').innerText = total;
+            
+            // Calcula a porcentagem de perda (Máximo é 60)
+            let perda = ((60 - total) / 60) * 100;
+            document.getElementById('mrc-perda').innerText = perda.toFixed(1); // Deixa com 1 casa decimal
+            
+            // Interpretação clínica (Critério FAUTI < 48)
+            let interp = "";
+            let interpEl = document.getElementById('mrc-interp');
+            
+            if (total === 60) {
+                interp = "Força Preservada";
+                interpEl.className = "bg-white text-indigo-700 px-4 py-2 rounded-xl text-xs md:text-sm uppercase font-bold text-center w-full sm:w-auto";
+            } else if (total >= 48) {
+                interp = "Fraqueza Leve a Moderada";
+                interpEl.className = "bg-amber-100 text-amber-700 px-4 py-2 rounded-xl text-xs md:text-sm uppercase font-bold text-center w-full sm:w-auto";
+            } else {
+                interp = "Fraqueza Adquirida (FAUTI)";
+                interpEl.className = "bg-red-100 text-red-700 px-4 py-2 rounded-xl text-xs md:text-sm uppercase font-bold text-center w-full sm:w-auto";
+            }
+            
+            interpEl.innerText = interp;
+        }
+
+
+        // Cálculo CPOT
+        function calcCPOT() {
+            let t = parseInt(document.getElementById('cpot-1').value) + 
+                    parseInt(document.getElementById('cpot-2').value) + 
+                    parseInt(document.getElementById('cpot-3').value) + 
+                    parseInt(document.getElementById('cpot-4').value);
+            document.getElementById('cpot-result').textContent = t;
+            document.getElementById('cpot-interp').textContent = t > 2 ? "Dor Presente" : "Sem dor";
+        }
+
+        // Cálculo Glasgow com Correção do NT
+        function calcGlasgow() {
+            let o = parseInt(document.getElementById('glasgow-o').value);
+            let v = parseInt(document.getElementById('glasgow-v').value);
+            let m = parseInt(document.getElementById('glasgow-m').value);
+            let p = parseInt(document.getElementById('glasgow-p').value); 
+            
+            let resultSpan = document.getElementById('glasgow-result');
+            let interpDiv = document.getElementById('glasgow-interp');
+            let iotAlert = document.getElementById('glasgow-iot');
+            let box = document.getElementById('glasgow-box');
+            
+            let hasNT = (o === 0 || v === 0 || m === 0);
+            let gcs_base = o + v + m;
+            let gcs_p = gcs_base + p; 
+            
+            if (hasNT) {
+                resultSpan.textContent = gcs_p + " NT";
+            } else {
+                resultSpan.textContent = gcs_p;
+            }
+            
+            if (gcs_base <= 8) {
+                interpDiv.textContent = hasNT ? "Grave (Avaliação Prejudicada)" : "Trauma Grave (Coma)";
+                box.className = "mt-2 bg-red-600 text-white p-5 rounded-2xl flex flex-col shadow-lg transition-all duration-300";
+                iotAlert.classList.remove('hidden'); 
+            } else if (gcs_base >= 9 && gcs_base <= 12) {
+                interpDiv.textContent = hasNT ? "Moderado (Avaliação Prejudicada)" : "Trauma Moderado";
+                box.className = "mt-2 bg-orange-500 text-white p-5 rounded-2xl flex flex-col shadow-lg transition-all duration-300";
+                iotAlert.classList.add('hidden');
+            } else {
+                interpDiv.textContent = hasNT ? "Leve (Avaliação Prejudicada)" : "Trauma Leve / Normal";
+                box.className = "mt-2 bg-yellow-500 text-white p-5 rounded-2xl flex flex-col shadow-lg transition-all duration-300";
+                iotAlert.classList.add('hidden');
+            }
+        }
+                // ==========================================
+        // LÓGICA DAS CALCULADORAS CLÍNICAS (MÓDULO 3)
+        // ==========================================
+        
+        // Função para trocar as Sub-abas das Calculadoras
+        function switchCalcTab(id) {
+            document.querySelectorAll('.calc-tab-content').forEach(c => {
+                c.classList.add('hidden');
+                c.classList.remove('active');
+            });
+            document.querySelectorAll('.calc-tab-btn').forEach(btn => {
+                btn.className = "calc-tab-btn flex-1 bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all";
+            });
+            let target = document.getElementById(id);
+            target.classList.remove('hidden');
+            target.classList.add('active');
+            
+            // Define as cores específicas para cada aba ativada
+            if (id === 'calc-metab') event.currentTarget.className = "calc-tab-btn flex-1 bg-orange-500 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all";
+            if (id === 'calc-forca') event.currentTarget.className = "calc-tab-btn flex-1 bg-purple-600 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all";
+            if (id === 'calc-geriatria') event.currentTarget.className = "calc-tab-btn flex-1 bg-teal-500 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all";
+        }
+
+        // 1. Peso Predito e VM
+        function calcPeso() {
+            let s = document.getElementById('calc-sexo').value;
+            let a = parseFloat(document.getElementById('calc-altura').value) || 0;
+            if (a < 100) return;
+            let peso = s === 'M' ? 50 + 0.91 * (a - 152.4) : 45.5 + 0.91 * (a - 152.4);
+            peso = peso.toFixed(1);
+            document.getElementById('res-peso').textContent = peso;
+            document.getElementById('res-vc4').textContent = Math.round(peso * 4);
+            document.getElementById('res-vc6').textContent = Math.round(peso * 6);
+            document.getElementById('res-vc8').textContent = Math.round(peso * 8);
+        }
+
+        // 2. TMB (Harris-Benedict)
+        function calcTMB() {
+            let s = document.getElementById('tmb-sexo').value;
+            let i = parseFloat(document.getElementById('tmb-idade').value) || 0;
+            let p = parseFloat(document.getElementById('tmb-peso').value) || 0;
+            let a = parseFloat(document.getElementById('tmb-altura').value) || 0;
+            if (i===0 || p===0 || a===0) return;
+            let tmb = s === 'M' ? 66.5 + (13.75 * p) + (5.0 * a) - (6.75 * i) : 655.1 + (9.56 * p) + (1.85 * a) - (4.68 * i);
+            document.getElementById('res-tmb').textContent = Math.round(tmb);
+        }
+
+        // 3. Índice ROX
+        function calcROX() {
+            let spo2 = parseFloat(document.getElementById('rox-spo2').value) || 0;
+            let fio2 = parseFloat(document.getElementById('rox-fio2').value) || 0;
+            let fr = parseFloat(document.getElementById('rox-fr').value) || 0;
+            if (fio2 === 0 || fr === 0) return;
+            let rox = (spo2 / (fio2/100)) / fr;
+            document.getElementById('res-rox').textContent = rox.toFixed(2);
+            let interp = document.getElementById('rox-interp');
+            if (rox >= 4.88) { interp.textContent = "Baixo risco (> 4.88)"; interp.className = "text-xs font-bold bg-emerald-100 text-emerald-700 py-1 px-3 rounded-lg"; }
+            else if (rox < 3.85) { interp.textContent = "Alto Risco IOT (< 3.85)"; interp.className = "text-xs font-bold bg-red-100 text-red-700 py-1 px-3 rounded-lg animate-pulse"; }
+            else { interp.textContent = "Atenção (3.85 - 4.88)"; interp.className = "text-xs font-bold bg-yellow-100 text-yellow-700 py-1 px-3 rounded-lg"; }
+        }
+
+        // 4. Carga 1RM
+        function calc1RM() {
+            let carga = parseFloat(document.getElementById('rm-carga').value) || 0;
+            let reps = parseFloat(document.getElementById('rm-reps').value) || 0;
+            if (carga === 0 || reps === 0) return;
+            let rm = carga * (1 + 0.0333 * reps);
+            document.getElementById('res-1rm').textContent = rm.toFixed(1);
+            document.getElementById('res-rm80').textContent = (rm * 0.8).toFixed(1);
+            document.getElementById('res-rm60').textContent = (rm * 0.6).toFixed(1);
+            document.getElementById('res-rm40').textContent = (rm * 0.4).toFixed(1);
+        }
+
+               // ==========================================
+        // CÁLCULO DE HANDGRIP (DINAPENIA)
+        // ==========================================
+        function calcHandgrip() {
+            let sexo = document.getElementById('hg-sexo').value;
+            let idade = Number(document.getElementById('hg-idade').value);
+            let altura = Number(document.getElementById('hg-altura').value);
+            let dom = Number(document.getElementById('hg-dom').value);
+            let ndom = Number(document.getElementById('hg-ndom').value);
+
+            // Só calcula o predito se tiver idade e altura preenchidas
+            if (!idade || !altura) return;
+
+            // Equação preditiva baseada em Regressão Múltipla (Altura e Idade)
+            let preditoDom = 0;
+            if (sexo === 'M') {
+                preditoDom = -22.5 + (0.50 * altura) - (0.25 * idade);
+            } else {
+                preditoDom = -19.5 + (0.35 * altura) - (0.20 * idade);
+            }
+
+            // Trava de segurança para não dar valores irreais
+            if (preditoDom < 0) preditoDom = 0;
+            
+            // Regra clínica: Mão não-dominante é aproximadamente 10% mais fraca
+            let preditoNdom = preditoDom * 0.90; 
+
+            // Mostra o predito na tela
+            document.getElementById('hg-predito').innerText = preditoDom.toFixed(1);
+
+            // Cálculos da Porcentagem de PERDA
+            let perdaDom = 0;
+            let perdaNdom = 0;
+
+            if (dom > 0) {
+                // Conta: 100% - (Valor Mensurado / Valor Predito * 100)
+                perdaDom = 100 - ((dom / preditoDom) * 100);
+                if (perdaDom < 0) perdaDom = 0; // Se ele fez mais força que o normal, a perda é zero
+            }
+            if (ndom > 0) {
+                perdaNdom = 100 - ((ndom / preditoNdom) * 100);
+                if (perdaNdom < 0) perdaNdom = 0;
+            }
+
+            // Exibe as perdas na tela
+            document.getElementById('hg-perda-dom').innerText = perdaDom.toFixed(1);
+            document.getElementById('hg-perda-ndom').innerText = perdaNdom.toFixed(1);
+
+            // ==========================================
+            // CLASSIFICAÇÃO EWGSOP2 (Rastreio Sarcopenia)
+            // ==========================================
+            let ewgsop = document.getElementById('hg-ewgsop');
+            // Pontos de corte europeus (amplamente usados no Brasil)
+            let cutoff = (sexo === 'M') ? 27 : 16; 
+            
+            // Pega o maior valor que o aluno digitou para avaliar dinapenia
+            let melhorForca = Math.max(dom || 0, ndom || 0);
+
+            if (dom === 0 && ndom === 0) {
+                ewgsop.innerText = "Aguardando dinamometria";
+                ewgsop.className = "text-xs md:text-sm font-black bg-slate-100 text-slate-500 py-2 px-3 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors";
+            } else if (melhorForca < cutoff) {
+                ewgsop.innerText = "Dinapenia Detectada (< " + cutoff + "kgf)";
+                ewgsop.className = "text-xs md:text-sm font-black bg-red-100 text-red-700 py-2 px-3 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors";
+            } else {
+                ewgsop.innerText = "Força Preservada (≥ " + cutoff + "kgf)";
+                ewgsop.className = "text-xs md:text-sm font-black bg-emerald-100 text-emerald-700 py-2 px-3 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors";
+            }
+        }
+
+
+        // 6. FC e Intensidade de Esforço
+        function calcEsforco() {
+            let i = parseFloat(document.getElementById('fc-idade').value) || 0;
+            let rep = parseFloat(document.getElementById('fc-rep').value) || 0;
+            let atual = parseFloat(document.getElementById('fc-atual').value) || 0;
+            if(i===0 || rep===0 || atual===0) return;
+            let fcmax = 220 - i;
+            let fcr = fcmax - rep;
+            let p_fcr = ((atual - rep) / fcr) * 100;
+            document.getElementById('res-fcr').textContent = p_fcr.toFixed(0);
+            
+            let interp = document.getElementById('fc-interp');
+            if(p_fcr < 40) { interp.textContent = "Muito Leve / Leve"; interp.className = "text-sm font-bold bg-emerald-100 text-emerald-700 py-2 px-4 rounded-xl"; }
+            else if(p_fcr < 60) { interp.textContent = "Esforço Moderado"; interp.className = "text-sm font-bold bg-yellow-100 text-yellow-700 py-2 px-4 rounded-xl"; }
+            else if(p_fcr < 90) { interp.textContent = "Esforço Vigoroso"; interp.className = "text-sm font-bold bg-orange-100 text-orange-700 py-2 px-4 rounded-xl"; }
+            else { interp.textContent = "Próximo à Máxima!"; interp.className = "text-sm font-bold bg-red-100 text-red-700 py-2 px-4 rounded-xl animate-pulse"; }
+        }
+
+        // 7. FRAIL Score
+        function calcFRAIL() {
+            let total = 0;
+            if(document.getElementById('fr-1').checked) total++;
+            if(document.getElementById('fr-2').checked) total++;
+            if(document.getElementById('fr-3').checked) total++;
+            if(document.getElementById('fr-4').checked) total++;
+            if(document.getElementById('fr-5').checked) total++;
+            
+            document.getElementById('res-frail').textContent = total;
+            let interp = document.getElementById('frail-interp');
+            if(total === 0) { interp.textContent = "Robusto"; interp.className = "bg-white text-emerald-700 px-3 py-1 rounded-lg text-xs uppercase font-bold"; }
+            else if(total <= 2) { interp.textContent = "Pré-frágil"; interp.className = "bg-white text-orange-600 px-3 py-1 rounded-lg text-xs uppercase font-bold"; }
+            else { interp.textContent = "Frágil"; interp.className = "bg-red-700 text-white px-3 py-1 rounded-lg text-xs uppercase font-bold animate-pulse"; }
+        }
+
+        // ==========================================
+        // CÁLCULO DO SARC-CalF
+        // ==========================================
+        function calcSarcF() {
+            // Pega o Sexo e a Panturrilha
+            let sexo = document.getElementById('sarc-sexo').value;
+            let cp = Number(document.getElementById('sarc-cp').value);
+
+            // Pega os valores das perguntas
+            let q1 = Number(document.getElementById('sarc-1').value) || 0;
+            let q2 = Number(document.getElementById('sarc-2').value) || 0;
+            let q3 = Number(document.getElementById('sarc-3').value) || 0;
+            let q4 = Number(document.getElementById('sarc-4').value) || 0;
+            let q5 = Number(document.getElementById('sarc-5').value) || 0;
+
+            // Calcula os pontos da Panturrilha (CalF)
+            let scoreCP = 0;
+            if (cp > 0) { // Só calcula se o aluno digitou algum valor
+                if (sexo === 'M' && cp <= 34) scoreCP = 10;
+                if (sexo === 'F' && cp <= 33) scoreCP = 10;
+            }
+
+            // Soma as perguntas + panturrilha
+            let total = q1 + q2 + q3 + q4 + q5 + scoreCP;
+            
+            // Exibe o total na tela
+            document.getElementById('sarc-result').innerText = total;
+
+            // Interpretação Clínica (Ponto de corte >= 11 para SARC-CalF)
+            let interpEl = document.getElementById('sarc-interp');
+            
+            if (total >= 11) {
+                interpEl.innerText = "Sugestivo de Sarcopenia (≥ 11)";
+                interpEl.className = "text-xs md:text-[13px] font-black bg-red-100 text-red-700 py-2 px-2 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors";
+            } else {
+                interpEl.innerText = "Sem Sinais Sugestivos (< 11)";
+                interpEl.className = "text-xs md:text-[13px] font-black bg-emerald-100 text-emerald-700 py-2 px-2 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors";
+            }
+        }
+
+        // ==========================================
+        // LÓGICA DO MÓDULO RESPIRATÓRIO (MÓDULO 4)
+        // ==========================================
+
+        // Função para trocar as sub-abas do Respiratório
+        function switchRespTab(id) {
+            document.querySelectorAll('.resp-tab-content').forEach(c => {
+                c.classList.add('hidden');
+                c.classList.remove('active');
+            });
+            document.querySelectorAll('.resp-tab-btn').forEach(btn => {
+                btn.className = "resp-tab-btn flex-1 bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all";
+            });
+            let target = document.getElementById(id);
+            target.classList.remove('hidden');
+            target.classList.add('active');
+            
+            event.currentTarget.className = "resp-tab-btn flex-1 bg-sky-500 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all";
+        }
+
+        // 1. Gerador de Ausculta
+        function gerarAusculta() {
+            let vent = document.getElementById('ausc-vent').value;
+            let ruido = document.getElementById('ausc-ruido').value;
+            let localDrop = document.getElementById('ausc-local');
+            let resultado = document.getElementById('ausc-resultado');
+
+            // Esconde ou mostra o local dependendo se há ruído
+            if (ruido === 'sem ruídos adventícios') {
+                localDrop.classList.add('hidden');
+                resultado.textContent = `Ausculta Pulmonar: ${vent}, ${ruido}.`;
+            } else {
+                localDrop.classList.remove('hidden');
+                let local = localDrop.value;
+                resultado.textContent = `Ausculta Pulmonar: ${vent}, ${ruido} ${local}.`;
+            }
+        }
+
+        function calcMano() {
+    let s = document.getElementById('mano-sexo').value;
+    let i = parseFloat(document.getElementById('mano-idade').value) || 0;
+    
+    if (i === 0) {
+        document.getElementById('mano-pi').textContent = "0";
+        document.getElementById('mano-pe').textContent = "0";
+        document.getElementById('mano-pi-lin').textContent = "0";
+        document.getElementById('mano-pe-lin').textContent = "0";
+        return;
+    }
+    
+    // Fórmulas de Neder (1999)
+    let pi = 0, pe = 0, lin_pi = 0, lin_pe = 0;
+
+    if (s === 'M') {
+        pi = 155.3 - (0.80 * i);
+        pe = 165.3 - (0.81 * i);
+        // Desvio Padrão Neder para Homens: PI (27.3) | PE (35.6)
+        lin_pi = pi - (1.64 * 27.3);
+        lin_pe = pe - (1.64 * 35.6);
+    } else {
+        pi = 110.4 - (0.49 * i);
+        pe = 115.6 - (0.61 * i);
+        // Desvio Padrão Neder para Mulheres: PI (16.9) | PE (25.3)
+        lin_pi = pi - (1.64 * 16.9);
+        lin_pe = pe - (1.64 * 25.3);
+    }
+
+    // Atualiza os valores na tela (arredondando para ficar limpo)
+    document.getElementById('mano-pi').textContent = Math.round(pi);
+    document.getElementById('mano-pe').textContent = Math.round(pe);
+    document.getElementById('mano-pi-lin').textContent = Math.round(lin_pi);
+    document.getElementById('mano-pe-lin').textContent = Math.round(lin_pe);
+}
+
+
+               // 3. Peak Flow (Pico de Fluxo) - Predito Automático
+        function calcPeakFlow() {
+            let s = document.getElementById('pf-sexo').value;
+            let i = parseFloat(document.getElementById('pf-idade').value) || 0;
+            let a = parseFloat(document.getElementById('pf-altura').value) || 0; 
+            let obt = parseFloat(document.getElementById('pf-obtido').value) || 0;
+            
+            let predDiv = document.getElementById('pf-predito-show');
+            let percDiv = document.getElementById('pf-porcentagem');
+            let zonaDiv = document.getElementById('pf-zona');
+
+            // Se faltar idade ou altura, não calcula
+            if (i === 0 || a === 0) {
+                predDiv.textContent = "0";
+                percDiv.textContent = "0";
+                zonaDiv.textContent = "Aguardando dados";
+                zonaDiv.className = "text-sm font-black bg-slate-100 text-slate-500 py-2 px-4 rounded-xl uppercase tracking-wider";
+                return;
+            }
+            
+            let a_metros = a / 100;
+            let pred_ls = 0;
+
+            // Equações Padrão (convertidas para L/min) alinhadas às diretrizes SBPT/ERS
+            if (s === 'M') {
+                pred_ls = (6.14 * a_metros) - (0.043 * i) + 0.15;
+            } else {
+                pred_ls = (5.50 * a_metros) - (0.030 * i) - 1.11;
+            }
+            
+            let pred_lmin = pred_ls * 60;
+            if (pred_lmin < 0) pred_lmin = 0; 
+            
+            predDiv.textContent = Math.round(pred_lmin);
+
+            // Se o estagiário ainda não inseriu o valor obtido no paciente, para aqui
+            if (obt === 0) {
+                percDiv.textContent = "0";
+                return;
+            }
+            
+            let perc = (obt / pred_lmin) * 100;
+            percDiv.textContent = Math.round(perc);
+            
+            if (perc >= 80) {
+                zonaDiv.textContent = "Zona Verde (Controle)";
+                zonaDiv.className = "text-sm font-black bg-emerald-100 text-emerald-700 py-2 px-4 rounded-xl uppercase tracking-wider";
+            } else if (perc >= 50) {
+                zonaDiv.textContent = "Zona Amarela (Atenção)";
+                zonaDiv.className = "text-sm font-black bg-yellow-100 text-yellow-700 py-2 px-4 rounded-xl uppercase tracking-wider";
+            } else {
+                zonaDiv.textContent = "Zona Vermelha (Emergência)";
+                zonaDiv.className = "text-sm font-black bg-red-100 text-red-700 py-2 px-4 rounded-xl uppercase tracking-wider animate-pulse";
+            }
+        }
+
+
+                // 4. Espirometria (Cálculo GLI-2012 e Interpretação)
+        function calcEspiro() {
+            let sexo = document.getElementById('esp-sexo').value;
+            let idade = parseFloat(document.getElementById('esp-idade').value) || 0;
+            let altura = parseFloat(document.getElementById('esp-altura').value) || 0;
+            let cvfR = parseFloat(document.getElementById('esp-cvf-real').value) || 0;
+            let vefR = parseFloat(document.getElementById('esp-vef1-real').value) || 0;
+            
+            let predCvfSpan = document.getElementById('esp-cvf-pred-val');
+            let predVefSpan = document.getElementById('esp-vef1-pred-val');
+            let diag = document.getElementById('esp-diagnostico');
+            let grav = document.getElementById('esp-gravidade');
+            let box = document.getElementById('esp-diag-box');
+
+            if (idade === 0 || altura === 0) {
+                diag.textContent = "Insira Idade e Altura";
+                box.className = "bg-slate-500 text-white p-5 rounded-2xl text-center shadow-lg";
+                return;
+            }
+
+            // EQUAÇÕES SIMPLIFICADAS GLI-2012 (Médias para População Brasileira/Caucasiana)
+            let a_metros = altura / 100;
+            let cvfP = 0;
+            let vefP = 0;
+
+            if (sexo === 'M') {
+                cvfP = (5.76 * a_metros) - (0.026 * idade) - 4.34;
+                vefP = (4.30 * a_metros) - (0.029 * idade) - 2.49;
+            } else {
+                cvfP = (4.43 * a_metros) - (0.026 * idade) - 2.89;
+                vefP = (3.95 * a_metros) - (0.025 * idade) - 2.60;
+            }
+
+            predCvfSpan.textContent = cvfP.toFixed(2);
+            predVefSpan.textContent = vefP.toFixed(2);
+
+            if (cvfR === 0 || vefR === 0) {
+                diag.textContent = "Insira os Valores Obtidos";
+                box.className = "bg-blue-400 text-white p-5 rounded-2xl text-center shadow-lg";
+                return;
+            }
+
+            let relacao = vefR / cvfR;
+            let percCvf = (cvfR / cvfP) * 100;
+            let percVef = (vefR / vefP) * 100;
+
+            document.getElementById('esp-relacao').textContent = relacao.toFixed(2);
+            document.getElementById('esp-cvf-perc').textContent = Math.round(percCvf);
+            document.getElementById('esp-vef1-perc').textContent = Math.round(percVef);
+
+            grav.classList.remove('hidden');
+
+            // ALGORITMO DE INTERPRETAÇÃO SBPT/GLI
+            if (relacao < 0.70) {
+                if (percCvf < 80) {
+                    diag.textContent = "Distúrbio Misto";
+                    grav.textContent = "Obstrução + Restrição sugerida";
+                    box.className = "bg-orange-600 text-white p-5 rounded-2xl text-center shadow-lg";
+                } else {
+                    diag.textContent = "DVO (Obstrutivo)";
+                    box.className = "bg-yellow-600 text-white p-5 rounded-2xl text-center shadow-lg";
+                    if(percVef >= 60) grav.textContent = "Grau Leve a Moderado";
+                    else if(percVef >= 40) grav.textContent = "Grau Grave";
+                    else grav.textContent = "Muito Grave";
+                }
+            } else {
+                if (percCvf < 80) {
+                    diag.textContent = "DVR (Restritivo)";
+                    box.className = "bg-rose-600 text-white p-5 rounded-2xl text-center shadow-lg";
+                    if(percCvf >= 60) grav.textContent = "Grau Leve a Moderado";
+                    else grav.textContent = "Grau Grave";
+                } else {
+                    diag.textContent = "Espirometria Normal";
+                    box.className = "bg-emerald-600 text-white p-5 rounded-2xl text-center shadow-lg font-black";
+                    grav.classList.add('hidden');
+                }
+            }
+        }
+
+
+            // 5. Cirtometria Torácica
+        function calcCirto() {
+            // Arrays com os id's das 3 zonas
+            const zonas = ['ax', 'xi', 'um'];
+            
+            zonas.forEach(z => {
+                let insp = parseFloat(document.getElementById(`cirto-${z}-insp`).value) || 0;
+                let exp = parseFloat(document.getElementById(`cirto-${z}-exp`).value) || 0;
+                let amp = insp - exp;
+                
+                // Agora permite mostrar o número negativo na tela
+                document.getElementById(`cirto-${z}-amp`).textContent = (insp > 0 || exp > 0) ? amp.toFixed(1) : "0";
+                
+                let interp = document.getElementById(`cirto-${z}-interp`);
+                if (insp > 0 && exp > 0) {
+                    if (amp < 0) {
+                        interp.textContent = "Padrão Paradoxal";
+                        interp.className = "w-full md:w-32 text-center text-[10px] font-bold uppercase py-2 rounded-lg bg-purple-200 text-purple-800 animate-pulse shadow-md";
+                    } else if (amp < 3) {
+                        interp.textContent = "Expansibilidade Diminuída";
+                        interp.className = "w-full md:w-32 text-center text-[10px] font-bold uppercase py-2 rounded-lg bg-red-100 text-red-700 animate-pulse";
+                    } else {
+                        interp.textContent = "Expansibilidade Preservada";
+                        interp.className = "w-full md:w-32 text-center text-[10px] font-bold uppercase py-2 rounded-lg bg-emerald-100 text-emerald-700";
+                    }
+                }
+            });
+        }
+        // ==========================================
+        // LÓGICA DO MÓDULO EXTRAS E TAMPA (MÓDULO 5)
+        // ==========================================
+
+        function switchExtrasTab(id) {
+            document.querySelectorAll('.extras-tab-content').forEach(c => {
+                c.classList.add('hidden');
+                c.classList.remove('active');
+            });
+            document.querySelectorAll('.extras-tab-btn').forEach(btn => {
+                btn.className = "extras-tab-btn flex-1 bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all";
+            });
+            let target = document.getElementById(id);
+            target.classList.remove('hidden');
+            target.classList.add('active');
+            
+            event.currentTarget.className = "extras-tab-btn flex-1 bg-fuchsia-600 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all";
+        }
+
+        // Perguntas da Escala de Tampa
+        const tampaPerguntas = [
+            "1. Tenho medo de me machucar se eu me exercitar.",
+            "2. Se eu tentasse superar a dor, ela aumentaria.",
+            "3. Meu corpo avisa que tenho algo grave.",
+            "4. Minha dor seria aliviada se eu me exercitasse. (Invertida)",
+            "5. Pessoas não levam minha condição a sério.",
+            "6. Acidentes acontecem, mas minha dor é porque fui descuidado.",
+            "7. Dor sempre significa que lesionei meu corpo.",
+            "8. Não é perigoso me exercitar mesmo com dor. (Invertida)",
+            "9. Estou com medo de lesionar-me acidentalmente.",
+            "10. O mais seguro é ter cuidado para não agravar.",
+            "11. Eu não teria tanta dor se estivesse em boa forma. (Invertida)",
+            "12. Mesmo com dor, me manter ativo é o melhor. (Invertida)",
+            "13. Dor me avisa para parar de fazer o que causa a dor.",
+            "14. É perigoso ser fisicamente ativo com dor.",
+            "15. Não posso fazer coisas normais até a dor melhorar.",
+            "16. Até pequenas dores podem significar problemas graves.",
+            "17. Ninguém entende o quanto eu sofro."
+        ];
+
+        // Gera o HTML da Escala de Tampa dinamicamente
+        const tampaContainer = document.getElementById('tampa-questions');
+        if(tampaContainer) {
+            tampaPerguntas.forEach((pergunta, index) => {
+                let i = index + 1;
+                tampaContainer.innerHTML += `
+                    <div class="flex justify-between items-center bg-amber-50/50 p-2 rounded-lg border border-amber-100/50 hover:bg-amber-100 transition-colors">
+                        <span class="flex-1 pr-4 text-xs md:text-sm">${pergunta}</span>
+                        <select id="tampa-q${i}" class="w-16 p-1 border border-amber-300 rounded-md text-center font-bold text-amber-900 outline-none" onchange="calcTampa()">
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                        </select>
+                    </div>
+                `;
+            });
+        }
+
+        // Calcula a Escala de Tampa
+        function calcTampa() {
+            let total = 0;
+            let invertidas = [4, 8, 11, 12];
+            
+            for(let i = 1; i <= 17; i++) {
+                let select = document.getElementById(`tampa-q${i}`);
+                if(select) {
+                    let val = parseInt(select.value) || 1;
+                    // Lógica de inversão (1 vira 4, 2 vira 3, etc)
+                    if(invertidas.includes(i)) {
+                        val = 5 - val;
+                    }
+                    total += val;
+                }
+            }
+            
+            document.getElementById('tampa-resultado').textContent = total;
+            let interp = document.getElementById('tampa-interp');
+            
+            if(total > 37) {
+                interp.innerHTML = "Cinesiofobia<br>ALTA";
+                interp.className = "bg-white text-red-600 px-3 py-1 rounded-lg text-[10px] uppercase font-black text-center leading-tight animate-pulse";
+            } else {
+                interp.innerHTML = "Cinesiofobia<br>Baixa";
+                interp.className = "bg-white text-amber-700 px-3 py-1 rounded-lg text-[10px] uppercase font-bold text-center leading-tight";
+            }
+        }
+        // Função para abrir/fechar a mini caixa de critérios da IMS
+        function toggleImsTooltip(btn) {
+            // Fecha qualquer outro tooltip que esteja aberto
+            document.querySelectorAll('.criterion-tooltip').forEach(tooltip => {
+                if (tooltip !== btn.nextElementSibling) {
+                    tooltip.classList.remove('visible');
+                }
+            });
+            // Abre/fecha o tooltip atual
+            btn.nextElementSibling.classList.toggle('visible');
+            
+            // Fecha se clicar fora
+            event.stopPropagation();
+            document.addEventListener('click', function closeTooltip() {
+                btn.nextElementSibling.classList.remove('visible');
+                document.removeEventListener('click', closeTooltip);
+            }, { once: true });
+        }
+        // ==========================================
+        // CONTADOR DE FREQUÊNCIA RESPIRATÓRIA (TAP)
+        // ==========================================
+        let tapTimes = []; // Guarda o horário exato de cada clique
+
+        function tapFR() {
+            const now = Date.now(); // Pega a hora exata do clique em milissegundos
+            tapTimes.push(now);
+
+            // Mantém apenas os últimos 5 cliques para a média não ficar lenta e se adaptar rápido se a FR mudar
+            if (tapTimes.length > 5) {
+                tapTimes.shift(); 
+            }
+
+            // Precisa de pelo menos 2 cliques para calcular a diferença de tempo
+            if (tapTimes.length > 1) {
+                let intervals = [];
+                // Calcula a diferença de tempo entre um clique e outro
+                for(let i = 1; i < tapTimes.length; i++) {
+                    intervals.push(tapTimes[i] - tapTimes[i-1]);
+                }
+                
+                // Faz a média de tempo (em milissegundos)
+                let avgInterval = intervals.reduce((a,b) => a + b, 0) / intervals.length;
+                
+                // Converte a média de milissegundos para Incursões por Minuto (60000 ms = 1 min)
+                let fr = Math.round(60000 / avgInterval);
+                
+                // Trava de segurança (se o aluno clicar feito um maluco sem querer)
+                if (fr > 80) fr = 80; 
+
+                // Mostra no visor
+                document.getElementById('fr-display').innerText = fr;
+                
+                // Interpretação Clínica (Classificação básica de repouso)
+                let interp = document.getElementById('fr-interp');
+                if (fr < 12) { 
+                    interp.innerText = 'Bradipneia'; 
+                    interp.className = 'text-xs md:text-sm text-blue-500 font-black uppercase transition-colors truncate'; 
+                } else if (fr > 20) { 
+                    interp.innerText = 'Taquipneia'; 
+                    interp.className = 'text-xs md:text-sm text-red-500 font-black uppercase transition-colors truncate'; 
+                } else { 
+                    interp.innerText = 'Eupneia'; 
+                    interp.className = 'text-xs md:text-sm text-emerald-500 font-black uppercase transition-colors truncate'; 
+                }
+            } else {
+                // Primeiro clique
+                document.getElementById('fr-display').innerText = '...';
+                document.getElementById('fr-interp').innerText = 'Toque novamente';
+                document.getElementById('fr-interp').className = 'text-xs md:text-sm text-teal-400 font-bold uppercase transition-colors truncate';
+            }
+        }
+
+        // Função do botão de Resetar
+        function resetFR() {
+            tapTimes = []; // Zera a memória de cliques
+            document.getElementById('fr-display').innerText = '0';
+            let interp = document.getElementById('fr-interp');
+            interp.innerText = 'Aguardando taps...';
+            interp.className = 'text-xs md:text-sm text-slate-400 font-black uppercase transition-colors truncate';
+        }
+
+    </script>
+        </body>
+</html>
+ 
