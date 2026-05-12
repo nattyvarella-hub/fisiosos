@@ -123,7 +123,7 @@
             <ul class="flex flex-wrap justify-center gap-2 pb-1">
                 <li><button onclick="switchMainTab('vitais')" id="btn-vitais" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm bg-violet-600 text-white shadow-md transform scale-105 transition-all"><i class="fas fa-heartbeat mr-1"></i>Sinais Vitais</button></li>
                 <li><button onclick="switchMainTab('escalas')" id="btn-escalas" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all"><i class="fas fa-list-ol mr-1"></i>Escalas</button></li>
-                <li><button onclick="switchMainTab('calculadoras')" id="btn-calculadoras" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all"><i class="fas fa-calculator mr-1"></i>Calculadoras</button></li>
+                <li><button onclick="switchMainTab('calculadoras')" id="btn-calculadoras" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all"><i class="fas fa-calculator mr-1"></i>Prescrição & Calculadoras</button></li>
                 <li><button onclick="switchMainTab('respiratorio')" id="btn-respiratorio" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all"><i class="fas fa-lungs mr-1"></i>Respiratório</button></li>
                 <li><button onclick="switchMainTab('outros')" id="btn-outros" class="main-tab-btn px-4 py-2 rounded-full font-bold text-sm text-slate-500 bg-slate-50 hover:bg-violet-100 transition-all"><i class="fas fa-layer-group mr-1"></i>Extras</button></li>
             </ul>
@@ -602,290 +602,309 @@
         </div>
 
 <div id="tab-calculadoras" class="tab-content hidden">
-<h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-calculator text-orange-500 mr-3"></i>Calculadoras Clínicas</h2>
+    <h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-running text-orange-500 mr-3"></i>Prescrição & Calculadoras</h2>
     
     <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 w-full">
+        <button onclick="switchCalcTab('calc-metab')" class="calc-tab-btn flex-1 min-w-[120px] bg-orange-500 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all">Prescrição de Exercício</button>
+        <button onclick="switchCalcTab('calc-forca')" class="calc-tab-btn flex-1 min-w-[120px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Dinamometria (Handgrip)</button>
+        <button onclick="switchCalcTab('calc-geriatria')" class="calc-tab-btn flex-1 min-w-[120px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Geriatria & Funcional</button>
+    </div>
 
-                <button onclick="switchCalcTab('calc-metab')" class="calc-tab-btn flex-1 min-w-[120px] bg-orange-500 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all">Resp & Metabólico</button>
-                <button onclick="switchCalcTab('calc-forca')" class="calc-tab-btn flex-1 min-w-[120px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Força & Esforço</button>
-                <button onclick="switchCalcTab('calc-geriatria')" class="calc-tab-btn flex-1 min-w-[120px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Geriatria & Funcional</button>
+     <div id="calc-metab" class="calc-tab-content active grid md:grid-cols-2 gap-4 md:gap-6 w-full max-w-full">
+        
+        <div class="bg-amber-50 rounded-3xl border-2 border-amber-100 p-4 md:p-6 shadow-sm w-full">
+            <h3 class="font-black text-xl text-amber-900 mb-4 border-b border-amber-200 pb-2"><i class="fas fa-fire mr-2"></i>TMB (Harris-Benedict)</h3>
+            <div class="grid grid-cols-2 gap-2 md:gap-3 mb-4 text-sm w-full">
+                <select id="tmb-sexo" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-amber-800 outline-none" onchange="calcTMB()">
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                </select>
+                <input type="number" id="tmb-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-center outline-none" oninput="calcTMB()">
+                <input type="number" id="tmb-peso" placeholder="Peso" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-center outline-none" oninput="calcTMB()">
+                <input type="number" id="tmb-altura" placeholder="Altura" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-center outline-none" oninput="calcTMB()">
+            </div>
+            <div class="bg-white p-4 rounded-2xl text-center shadow-inner w-full">
+                <span class="text-xs font-bold text-slate-500 uppercase">Gasto Energético Basal</span>
+                <div class="text-3xl font-black text-amber-600 truncate"><span id="res-tmb">0</span> <span class="text-lg">kcal/dia</span></div>
+            </div>
+        </div>
+
+        <div class="bg-purple-50 rounded-3xl border-2 border-purple-100 p-4 md:p-6 shadow-sm w-full">
+            <h3 class="font-black text-xl text-purple-900 mb-4 border-b border-purple-200 pb-2"><i class="fas fa-dumbbell mr-2"></i>Carga Máxima (1RM)</h3>
+            <div class="flex gap-2 md:gap-3 mb-4 text-sm w-full">
+                <input type="number" id="rm-carga" placeholder="Carga (kg)" class="w-full min-w-0 flex-1 p-2 border-2 border-purple-200 rounded-xl font-bold text-center outline-none" oninput="calc1RM()">
+                <input type="number" id="rm-reps" placeholder="Repetições" class="w-full min-w-0 flex-1 p-2 border-2 border-purple-200 rounded-xl font-bold text-center outline-none" oninput="calc1RM()">
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-inner text-center w-full">
+                <div class="text-3xl font-black text-purple-600 mb-2 truncate"><span id="res-1rm">0</span> <span class="text-lg">kg (100%)</span></div>
+                <div class="grid grid-cols-3 gap-1 md:gap-2 text-xs border-t pt-2 w-full">
+                    <div class="truncate"><strong id="res-rm40" class="text-slate-700 text-sm md:text-base block">0</strong>40%</div>
+                    <div class="truncate"><strong id="res-rm60" class="text-emerald-600 text-sm md:text-base block">0</strong>60%</div>
+                    <div class="truncate"><strong id="res-rm80" class="text-slate-700 text-sm md:text-base block">0</strong>80%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-pink-50 rounded-3xl border-2 border-pink-100 p-4 md:p-6 shadow-sm md:col-span-2 w-full">
+            <h3 class="font-black text-xl text-pink-900 mb-4 border-b border-pink-200 pb-2"><i class="fas fa-heartbeat mr-2"></i>Zonas de Esforço (FC de Reserva)</h3>
+            
+            <div class="grid grid-cols-3 gap-2 md:gap-3 mb-4 text-sm w-full">
+                <input type="number" id="fc-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-pink-200 rounded-xl font-bold text-center outline-none" oninput="calcEsforco()">
+                <input type="number" id="fc-rep" placeholder="Repouso" class="w-full min-w-0 p-2 border-2 border-pink-200 rounded-xl font-bold text-center outline-none" oninput="calcEsforco()">
+                <input type="number" id="fc-atual" placeholder="Atual" class="w-full min-w-0 p-2 border-2 border-pink-200 rounded-xl font-bold text-center outline-none" oninput="calcEsforco()">
+            </div>
+            
+            <div class="bg-white p-4 rounded-2xl shadow-inner text-center flex flex-col sm:flex-row justify-between items-center gap-3 px-4 w-full mb-4">
+                <div class="text-center sm:text-left w-full sm:w-auto">
+                    <div class="text-xs font-bold text-slate-500 uppercase truncate">Intensidade do Esforço</div>
+                    <div class="text-3xl font-black text-pink-600 truncate"><span id="res-fcr">0</span>% <span class="text-sm text-slate-400">da FCR</span></div>
+                </div>
+                <div id="fc-interp" class="text-xs md:text-sm font-bold bg-slate-100 text-slate-500 py-2 px-3 rounded-xl w-full sm:w-auto truncate">Aguardando dados</div>
             </div>
 
-            <div id="calc-metab" class="calc-tab-content active grid md:grid-cols-2 gap-4 md:gap-6 w-full max-w-full">
+            <div class="bg-white/70 p-3 md:p-4 rounded-2xl border border-pink-200 shadow-sm w-full">
+                <h4 class="text-[10px] md:text-xs font-black text-pink-800 uppercase mb-3 flex items-center"><i class="fas fa-bullseye mr-2 text-pink-500"></i>Alvos de Treinamento (ACSM)</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-[10px] md:text-xs font-bold">
+                    <div class="bg-emerald-50 text-emerald-700 p-2 rounded-xl border border-emerald-100 flex flex-col justify-center">
+                        <span class="text-[9px] uppercase opacity-70 mb-1">Leve (< 40%)</span>
+                        <span id="z-leve" class="text-sm md:text-base font-black">---</span>
+                    </div>
+                    <div class="bg-yellow-50 text-yellow-700 p-2 rounded-xl border border-yellow-100 flex flex-col justify-center">
+                        <span class="text-[9px] uppercase opacity-70 mb-1">Mod (40-59%)</span>
+                        <span id="z-mod" class="text-sm md:text-base font-black">---</span>
+                    </div>
+                    <div class="bg-orange-50 text-orange-700 p-2 rounded-xl border border-orange-100 flex flex-col justify-center">
+                        <span class="text-[9px] uppercase opacity-70 mb-1">Vig (60-89%)</span>
+                        <span id="z-vig" class="text-sm md:text-base font-black">---</span>
+                    </div>
+                    <div class="bg-red-50 text-red-700 p-2 rounded-xl border border-red-100 flex flex-col justify-center">
+                        <span class="text-[9px] uppercase opacity-70 mb-1">Máx (≥ 90%)</span>
+                        <span id="z-max" class="text-sm md:text-base font-black">---</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <div id="calc-forca" class="calc-tab-content hidden w-full max-w-full">
+        <div class="bg-indigo-50 rounded-3xl border-2 border-indigo-100 p-4 md:p-6 shadow-sm w-full max-w-2xl mx-auto">
+            <h3 class="font-black text-xl text-indigo-900 mb-4 border-b border-indigo-200 pb-2"><i class="fas fa-hand-rock mr-2"></i>Handgrip (Dinapenia)</h3>
+            
+            <div class="grid grid-cols-3 gap-2 mb-3 text-sm w-full">
+                <select id="hg-sexo" class="w-full min-w-0 p-2 border-2 border-indigo-200 rounded-lg font-bold text-indigo-800 outline-none" onchange="calcHandgrip()">
+                    <option value="M">Masc</option>
+                    <option value="F">Fem</option>
+                </select>
+                <input type="number" id="hg-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-indigo-200 rounded-lg font-bold text-center outline-none" oninput="calcHandgrip()">
+                <input type="number" id="hg-altura" placeholder="Alt(cm)" class="w-full min-w-0 p-2 border-2 border-indigo-200 rounded-lg font-bold text-center outline-none" oninput="calcHandgrip()">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mb-4 text-sm w-full">
+                <input type="number" id="hg-dom" placeholder="Dominante" class="w-full min-w-0 p-2 border-2 border-indigo-400 rounded-lg font-black text-center outline-none bg-indigo-100 text-indigo-900 placeholder-indigo-500" oninput="calcHandgrip()">
+                <input type="number" id="hg-ndom" placeholder="N-Dominante" class="w-full min-w-0 p-2 border-2 border-indigo-400 rounded-lg font-black text-center outline-none bg-indigo-100 text-indigo-900 placeholder-indigo-500" oninput="calcHandgrip()">
+            </div>
+
+            <div class="bg-white p-3 md:p-4 rounded-2xl shadow-inner border border-indigo-100 w-full min-w-0">
+                <div class="text-center mb-3 border-b border-indigo-50 pb-2">
+                    <span class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase mb-1">Predito Normal (Dominante)</span>
+                    <div class="text-2xl md:text-3xl font-black text-slate-700 truncate"><span id="hg-predito">0.0</span> <span class="text-xs md:text-sm text-slate-400">kgf</span></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-center mb-3">
+                    <div class="bg-indigo-50 p-2 rounded-xl border border-indigo-100">
+                        <span class="block text-[9px] md:text-[10px] font-bold text-indigo-400 uppercase truncate">Perda Dominante</span>
+                        <div class="text-lg md:text-xl font-black text-indigo-600 truncate"><span id="hg-perda-dom">0</span>%</div>
+                    </div>
+                    <div class="bg-indigo-50 p-2 rounded-xl border border-indigo-100">
+                        <span class="block text-[9px] md:text-[10px] font-bold text-indigo-400 uppercase truncate">Perda N-Dominante</span>
+                        <div class="text-lg md:text-xl font-black text-indigo-600 truncate"><span id="hg-perda-ndom">0</span>%</div>
+                    </div>
+                </div>
+
+                <div id="hg-ewgsop" class="text-xs md:text-sm font-black bg-slate-100 text-slate-500 py-2 px-3 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors">
+                    Aguardando dados
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div id="calc-geriatria" class="calc-tab-content hidden grid md:grid-cols-2 gap-6 w-full max-w-full">
+        
+        <div class="bg-teal-50 rounded-3xl border-2 border-teal-100 p-4 md:p-6 shadow-sm w-full max-w-full">
+            <div class="flex items-center mb-4 border-b border-teal-200 pb-2 relative z-20 w-full">
+                <h3 class="font-black text-xl text-teal-900"><i class="fas fa-user-md mr-2"></i>FRAIL Score</h3>
+                <div class="relative ml-2">
+                    <button onclick="toggleImsTooltip(this, event)" class="text-teal-500 hover:text-teal-700 transition-colors text-base p-1 flex items-center" title="Entenda a Escala FRAIL">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                    <div class="criterion-tooltip tooltip-down" style="width: 270px;">
+                        <strong class="block mb-2 text-teal-300 border-b border-slate-600 pb-1">O que é a Escala FRAIL?</strong>
+                        É um instrumento rápido de rastreio para a <strong>Síndrome de Fragilidade</strong> em idosos.<br>
+                        <ul class="mt-2 mb-3 pl-4 list-disc text-slate-200 text-left">
+                            <li><strong class="text-white">F</strong>atigue (Fadiga)</li>
+                            <li><strong class="text-white">R</strong>esistance (Subir escadas)</li>
+                            <li><strong class="text-white">A</strong>mbulation (Caminhar)</li>
+                            <li><strong class="text-white">I</strong>llnesses (> 5 doenças)</li>
+                            <li><strong class="text-white">L</strong>oss of weight (Perda de peso)</li>
+                        </ul>
+                        <div class="bg-slate-900 p-2 rounded-lg text-center text-[10px] md:text-xs border border-slate-700">
+                            <span class="text-emerald-400 font-bold">0:</span> Robusto <span class="text-slate-500 mx-1">|</span> 
+                            <span class="text-yellow-400 font-bold">1-2:</span> Pré-frágil <span class="text-slate-500 mx-1">|</span> 
+                            <span class="text-red-400 font-bold">3-5:</span> Frágil
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2 text-xs md:text-sm font-medium text-teal-800 w-full">
+                <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                    <input type="checkbox" id="fr-1" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                    <span class="leading-tight">Fadiga (Cansado a maior parte do tempo?)</span>
+                </label>
+                <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                    <input type="checkbox" id="fr-2" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                    <span class="leading-tight">Resistência (Dificuldade de subir 1 lance de escadas?)</span>
+                </label>
+                <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                    <input type="checkbox" id="fr-3" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                    <span class="leading-tight">Deambulação (Dificuldade de andar 1 quarteirão?)</span>
+                </label>
+                <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                    <input type="checkbox" id="fr-4" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                    <span class="leading-tight">Comorbidades (Possui 5 ou mais doenças?)</span>
+                </label>
+                <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
+                    <input type="checkbox" id="fr-5" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
+                    <span class="leading-tight">Perda de Peso (> 5% nos últimos 6 meses?)</span>
+                </label>
+            </div>
+
+            <div class="mt-4 bg-teal-600 text-white p-4 rounded-2xl flex justify-between items-center shadow-lg w-full">
+                <span class="font-black text-lg md:text-xl">TOTAL: <span id="res-frail">0</span></span>
+                <span id="frail-interp" class="bg-white text-teal-700 px-3 py-1 rounded-lg text-xs md:text-sm uppercase font-bold text-center">Robusto</span>
+            </div>
+        </div>
+
+        <div class="bg-fuchsia-50 rounded-3xl border-2 border-fuchsia-100 p-4 md:p-6 shadow-sm w-full">
+            <h3 class="font-black text-xl text-fuchsia-900 mb-4 border-b border-fuchsia-200 pb-2"><i class="fas fa-child mr-2"></i>SARC-CalF (Rastreio)</h3>
+            
+            <div class="grid grid-cols-2 gap-3 mb-4 w-full">
+                <div class="bg-white p-2 rounded-xl border border-fuchsia-100 shadow-sm">
+                    <label class="block text-[10px] md:text-xs font-bold text-fuchsia-800 uppercase mb-1">Sexo</label>
+                    <select id="sarc-sexo" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                        <option value="F">Feminino</option>
+                        <option value="M">Masculino</option>
+                    </select>
+                </div>
+                <div class="bg-white p-2 rounded-xl border border-fuchsia-100 shadow-sm">
+                    <label class="block text-[10px] md:text-xs font-bold text-fuchsia-800 uppercase mb-1">Circ. Panturrilha (cm)</label>
+                    <input type="number" id="sarc-cp" placeholder="Ex: 32" class="w-full min-w-0 p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-center text-slate-700 outline-none focus:border-fuchsia-400" oninput="calcSarcF()">
+                </div>
+            </div>
+
+            <div class="space-y-3 w-full">
+                <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                    <label class="block mb-2">
+                        <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">1. Força</strong>
+                    </label>
+                    <select id="sarc-1" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                        <option value="0">Nenhuma (0)</option>
+                        <option value="1">Alguma (1)</option>
+                        <option value="2">Muita / Não consegue (2)</option>
+                    </select>
+                </div>
+
+                <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                    <label class="block mb-2">
+                        <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">2. Ajuda para caminhar</strong>
+                    </label>
+                    <select id="sarc-2" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                        <option value="0">Nenhuma (0)</option>
+                        <option value="1">Alguma (1)</option>
+                        <option value="2">Muita / Usa apoios (2)</option>
+                    </select>
+                </div>
+
+                <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                    <label class="block mb-2">
+                        <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">3. Levantar da cadeira</strong>
+                    </label>
+                    <select id="sarc-3" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                        <option value="0">Nenhuma (0)</option>
+                        <option value="1">Alguma (1)</option>
+                        <option value="2">Muita / Não consegue s/ ajuda (2)</option>
+                    </select>
+                </div>
+
+                <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                    <label class="block mb-2">
+                        <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">4. Subir escadas</strong>
+                    </label>
+                    <select id="sarc-4" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                        <option value="0">Nenhuma (0)</option>
+                        <option value="1">Alguma (1)</option>
+                        <option value="2">Muita / Não consegue (2)</option>
+                    </select>
+                </div>
+
+                <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
+                    <label class="block mb-2">
+                        <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">5. Quedas (último ano)</strong>
+                    </label>
+                    <select id="sarc-5" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
+                        <option value="0">Nenhuma (0)</option>
+                        <option value="1">1 a 3 quedas (1)</option>
+                        <option value="2">4 ou mais quedas (2)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-4 bg-white p-4 rounded-2xl shadow-inner text-center border border-fuchsia-100 w-full min-w-0">
+                <span class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase mb-1">Somatório Final</span>
+                <div class="text-3xl md:text-4xl font-black text-fuchsia-600 mb-2"><span id="sarc-result">0</span> <span class="text-sm text-slate-400">/ 20</span></div>
+                <div id="sarc-interp" class="text-xs md:text-[13px] font-black bg-emerald-100 text-emerald-700 py-2 px-3 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors">
+                    Sem sinais (< 11)
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-blue-50 rounded-3xl border-2 border-blue-100 p-4 md:p-6 shadow-sm md:col-span-2 w-full">
+            <div class="flex items-center mb-4 border-b border-blue-200 pb-2 relative z-20 w-full">
+                <h3 class="font-black text-xl text-blue-900"><i class="fas fa-stopwatch mr-2"></i>TUG (Timed Up and Go)</h3>
+                <div class="relative ml-2">
+                    <button onclick="toggleImsTooltip(this, event)" class="text-blue-500 hover:text-blue-700 transition-colors text-base p-1" title="Entenda o TUG">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                    <div class="criterion-tooltip tooltip-down" style="width: 270px;">
+                        <strong class="block mb-2 text-blue-300 border-b border-slate-600 pb-1">Como realizar o TUG?</strong>
+                        <p class="text-slate-200 mb-2 text-xs">O paciente deve levantar de uma cadeira (se possível sem usar os braços), caminhar 3 metros, virar, voltar e sentar-se novamente.</p>
+                        <p class="text-slate-200 text-xs">O tempo começa ao comando de "Vai" e para quando o paciente apoia as costas na cadeira.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 mb-4">
+                <div class="flex-1 bg-white p-4 rounded-2xl shadow-sm border border-blue-100 text-center flex flex-col justify-center items-center">
+                    <span id="tug-display" class="text-4xl md:text-5xl font-black text-blue-700 font-mono mb-3">0.0<span class="text-lg text-blue-400">s</span></span>
+                    <div class="flex gap-2">
+                        <button id="btn-tug-start" onclick="startTUG()" class="bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs md:text-sm font-bold shadow-md hover:bg-emerald-600 uppercase transition-colors"><i class="fas fa-play mr-1"></i>Iniciar</button>
+                        <button id="btn-tug-stop" onclick="stopTUG()" class="bg-red-500 text-white px-4 py-2 rounded-xl text-xs md:text-sm font-bold shadow-md hover:bg-red-600 uppercase transition-colors hidden"><i class="fas fa-stop mr-1"></i>Parar</button>
+                        <button onclick="resetTUG()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs md:text-sm font-bold shadow-sm hover:bg-slate-300 uppercase transition-colors"><i class="fas fa-redo-alt"></i></button>
+                    </div>
+                </div>
                 
-                <div class="bg-amber-50 rounded-3xl border-2 border-amber-100 p-4 md:p-6 shadow-sm w-full">
-                    <h3 class="font-black text-xl text-amber-900 mb-4 border-b border-amber-200 pb-2"><i class="fas fa-fire mr-2"></i>TMB (Harris-Benedict)</h3>
-                    
-                    <div class="grid grid-cols-2 gap-2 md:gap-3 mb-4 text-sm w-full">
-                        <select id="tmb-sexo" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-amber-800 outline-none" onchange="calcTMB()">
-                            <option value="M">Masculino</option>
-                            <option value="F">Feminino</option>
-                        </select>
-                        <input type="number" id="tmb-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-center outline-none" oninput="calcTMB()">
-                        <input type="number" id="tmb-peso" placeholder="Peso" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-center outline-none" oninput="calcTMB()">
-                        <input type="number" id="tmb-altura" placeholder="Altura" class="w-full min-w-0 p-2 border-2 border-amber-200 rounded-xl font-bold text-center outline-none" oninput="calcTMB()">
-                    </div>
-                    
-                    <div class="bg-white p-4 rounded-2xl text-center shadow-inner w-full">
-                        <span class="text-xs font-bold text-slate-500 uppercase">Gasto Energético Basal</span>
-                        <div class="text-3xl font-black text-amber-600 truncate"><span id="res-tmb">0</span> <span class="text-lg">kcal/dia</span></div>
-                    </div>
-                </div>
-
-                <div class="bg-orange-50 rounded-3xl border-2 border-orange-100 p-4 md:p-6 shadow-sm w-full">
-                    <h3 class="font-black text-xl text-orange-900 mb-4 border-b border-orange-200 pb-2"><i class="fas fa-lungs mr-2"></i>VM: Peso Predito</h3>
-                    <div class="flex gap-2 md:gap-3 mb-4 text-sm w-full">
-                        <select id="calc-sexo" class="w-full min-w-0 flex-1 p-2 border-2 border-orange-200 rounded-xl font-bold text-orange-800 outline-none" onchange="calcPeso()"><option value="M">Masculino</option><option value="F">Feminino</option></select>
-                        <input type="number" id="calc-altura" value="170" class="w-full min-w-0 flex-1 p-2 border-2 border-orange-200 rounded-xl font-bold text-center outline-none" oninput="calcPeso()">
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center w-full">
-                        <div class="text-3xl font-black text-orange-600 mb-2 truncate"><span id="res-peso">66.3</span> <span class="text-lg">kg</span></div>
-                        <div class="grid grid-cols-3 gap-1 md:gap-2 text-xs border-t pt-2 w-full">
-                            <div class="truncate"><strong id="res-vc4" class="text-slate-700 text-sm md:text-base block">265</strong>4 ml/kg</div>
-                            <div class="truncate"><strong id="res-vc6" class="text-emerald-600 text-sm md:text-base block">398</strong>6 ml/kg</div>
-                            <div class="truncate"><strong id="res-vc8" class="text-slate-700 text-sm md:text-base block">530</strong>8 ml/kg</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-blue-50 rounded-3xl border-2 border-blue-100 p-4 md:p-6 shadow-sm md:col-span-2 w-full">
-                    <h3 class="font-black text-xl text-blue-900 mb-4 border-b border-blue-200 pb-2"><i class="fas fa-wind mr-2"></i>Índice ROX (CNAF/Extubação)</h3>
-                    <div class="grid grid-cols-3 gap-2 md:gap-3 mb-4 text-sm w-full">
-                        <input type="number" id="rox-spo2" placeholder="SpO2 %" class="w-full min-w-0 p-2 border-2 border-blue-200 rounded-xl font-bold text-center outline-none" oninput="calcROX()">
-                        <input type="number" id="rox-fio2" placeholder="FiO2 %" class="w-full min-w-0 p-2 border-2 border-blue-200 rounded-xl font-bold text-center outline-none" oninput="calcROX()">
-                        <input type="number" id="rox-fr" placeholder="FR" class="w-full min-w-0 p-2 border-2 border-blue-200 rounded-xl font-bold text-center outline-none" oninput="calcROX()">
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center flex flex-col sm:flex-row justify-between items-center gap-3 px-4 w-full">
-                        <div class="text-4xl font-black text-blue-600 truncate"><span id="res-rox">0.00</span></div>
-                        <div id="rox-interp" class="text-xs md:text-sm font-bold bg-slate-100 text-slate-500 py-2 px-3 rounded-xl w-full sm:w-auto truncate">Aguardando dados</div>
-                    </div>
+                <div class="flex-1 bg-white p-4 rounded-2xl shadow-sm border border-blue-100 flex flex-col justify-center">
+                    <label class="block text-[10px] md:text-xs font-bold text-slate-400 uppercase mb-2 text-center">Ou digite o tempo</label>
+                    <input type="number" id="tug-tempo" placeholder="Tempo (s)" class="w-full p-3 border-2 border-blue-100 bg-blue-50 rounded-xl font-black text-center text-2xl text-blue-900 outline-none focus:border-blue-500 transition-colors" oninput="calcTUG()">
                 </div>
             </div>
 
-            <div id="calc-forca" class="calc-tab-content hidden grid md:grid-cols-2 gap-4 md:gap-6 w-full max-w-full">
-                
-                <div class="bg-purple-50 rounded-3xl border-2 border-purple-100 p-4 md:p-6 shadow-sm w-full">
-                    <h3 class="font-black text-xl text-purple-900 mb-4 border-b border-purple-200 pb-2"><i class="fas fa-dumbbell mr-2"></i>Carga Máxima (1RM)</h3>
-                    <div class="flex gap-2 md:gap-3 mb-4 text-sm w-full">
-                        <input type="number" id="rm-carga" placeholder="Carga (kg)" class="w-full min-w-0 flex-1 p-2 border-2 border-purple-200 rounded-xl font-bold text-center outline-none" oninput="calc1RM()">
-                        <input type="number" id="rm-reps" placeholder="Repetições" class="w-full min-w-0 flex-1 p-2 border-2 border-purple-200 rounded-xl font-bold text-center outline-none" oninput="calc1RM()">
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center w-full">
-                        <div class="text-3xl font-black text-purple-600 mb-2 truncate"><span id="res-1rm">0</span> <span class="text-lg">kg (100%)</span></div>
-                        <div class="grid grid-cols-3 gap-1 md:gap-2 text-xs border-t pt-2 w-full">
-                            <div class="truncate"><strong id="res-rm40" class="text-slate-700 text-sm md:text-base block">0</strong>40%</div>
-                            <div class="truncate"><strong id="res-rm60" class="text-emerald-600 text-sm md:text-base block">0</strong>60%</div>
-                            <div class="truncate"><strong id="res-rm80" class="text-slate-700 text-sm md:text-base block">0</strong>80%</div>
-                        </div>
-                    </div>
-                </div>
-
-                             <div class="bg-indigo-50 rounded-3xl border-2 border-indigo-100 p-4 md:p-6 shadow-sm w-full">
-                    <h3 class="font-black text-xl text-indigo-900 mb-4 border-b border-indigo-200 pb-2"><i class="fas fa-hand-rock mr-2"></i>Handgrip (Dinapenia)</h3>
-                    
-                    <div class="grid grid-cols-3 gap-2 mb-3 text-sm w-full">
-                        <select id="hg-sexo" class="w-full min-w-0 p-2 border-2 border-indigo-200 rounded-lg font-bold text-indigo-800 outline-none" onchange="calcHandgrip()">
-                            <option value="M">Masc</option>
-                            <option value="F">Fem</option>
-                        </select>
-                        <input type="number" id="hg-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-indigo-200 rounded-lg font-bold text-center outline-none" oninput="calcHandgrip()">
-                        <input type="number" id="hg-altura" placeholder="Alt(cm)" class="w-full min-w-0 p-2 border-2 border-indigo-200 rounded-lg font-bold text-center outline-none" oninput="calcHandgrip()">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2 mb-4 text-sm w-full">
-                        <input type="number" id="hg-dom" placeholder="Dominante" class="w-full min-w-0 p-2 border-2 border-indigo-400 rounded-lg font-black text-center outline-none bg-indigo-100 text-indigo-900 placeholder-indigo-500" oninput="calcHandgrip()">
-                        <input type="number" id="hg-ndom" placeholder="N-Dominante" class="w-full min-w-0 p-2 border-2 border-indigo-400 rounded-lg font-black text-center outline-none bg-indigo-100 text-indigo-900 placeholder-indigo-500" oninput="calcHandgrip()">
-                    </div>
-
-                    <div class="bg-white p-3 md:p-4 rounded-2xl shadow-inner border border-indigo-100 w-full min-w-0">
-                        <div class="text-center mb-3 border-b border-indigo-50 pb-2">
-                            <span class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase mb-1">Predito Normal (Dominante)</span>
-                            <div class="text-2xl md:text-3xl font-black text-slate-700 truncate"><span id="hg-predito">0.0</span> <span class="text-xs md:text-sm text-slate-400">kgf</span></div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2 text-center mb-3">
-                            <div class="bg-indigo-50 p-2 rounded-xl border border-indigo-100">
-                                <span class="block text-[9px] md:text-[10px] font-bold text-indigo-400 uppercase truncate">Perda Dominante</span>
-                                <div class="text-lg md:text-xl font-black text-indigo-600 truncate"><span id="hg-perda-dom">0</span>%</div>
-                            </div>
-                            <div class="bg-indigo-50 p-2 rounded-xl border border-indigo-100">
-                                <span class="block text-[9px] md:text-[10px] font-bold text-indigo-400 uppercase truncate">Perda N-Dominante</span>
-                                <div class="text-lg md:text-xl font-black text-indigo-600 truncate"><span id="hg-perda-ndom">0</span>%</div>
-                            </div>
-                        </div>
-
-                        <div id="hg-ewgsop" class="text-xs md:text-sm font-black bg-slate-100 text-slate-500 py-2 px-3 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors">
-                            Aguardando dados
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-pink-50 rounded-3xl border-2 border-pink-100 p-4 md:p-6 shadow-sm md:col-span-2 w-full">
-                    <h3 class="font-black text-xl text-pink-900 mb-4 border-b border-pink-200 pb-2"><i class="fas fa-heartbeat mr-2"></i>Zonas de Esforço (FC de Reserva)</h3>
-                    <div class="grid grid-cols-3 gap-2 md:gap-3 mb-4 text-sm w-full">
-                        <input type="number" id="fc-idade" placeholder="Idade" class="w-full min-w-0 p-2 border-2 border-pink-200 rounded-xl font-bold text-center outline-none" oninput="calcEsforco()">
-                        <input type="number" id="fc-rep" placeholder="Repouso" class="w-full min-w-0 p-2 border-2 border-pink-200 rounded-xl font-bold text-center outline-none" oninput="calcEsforco()">
-                        <input type="number" id="fc-atual" placeholder="Atual" class="w-full min-w-0 p-2 border-2 border-pink-200 rounded-xl font-bold text-center outline-none" oninput="calcEsforco()">
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center flex flex-col sm:flex-row justify-between items-center gap-3 px-4 w-full">
-                        <div class="text-center sm:text-left w-full sm:w-auto">
-                            <div class="text-xs font-bold text-slate-500 uppercase truncate">Intensidade do Esforço</div>
-                            <div class="text-3xl font-black text-pink-600 truncate"><span id="res-fcr">0</span>% <span class="text-sm text-slate-400">da FCR</span></div>
-                        </div>
-                        <div id="fc-interp" class="text-xs md:text-sm font-bold bg-slate-100 text-slate-500 py-2 px-3 rounded-xl w-full sm:w-auto truncate">Aguardando dados</div>
-                    </div>
-                </div>
+            <div id="tug-result-box" class="bg-blue-600 text-white p-4 rounded-2xl shadow-lg w-full text-center transition-colors duration-300">
+                <span class="block text-[10px] md:text-xs font-bold uppercase opacity-80 mb-1">Interpretação Clínica:</span>
+                <div id="tug-interp" class="text-base md:text-xl font-black tracking-wide uppercase">Aguardando dados</div>
             </div>
-
-            <div id="calc-geriatria" class="calc-tab-content hidden grid md:grid-cols-2 gap-6">
-                              <div class="bg-teal-50 rounded-3xl border-2 border-teal-100 p-4 md:p-6 shadow-sm w-full max-w-full">
-                    
-                    <div class="flex items-center mb-4 border-b border-teal-200 pb-2 relative z-20 w-full">
-                        <h3 class="font-black text-xl text-teal-900"><i class="fas fa-user-md mr-2"></i>FRAIL Score</h3>
-                        
-                        <div class="relative ml-2">
-                            <button onclick="toggleImsTooltip(this, event)" class="text-teal-500 hover:text-teal-700 transition-colors text-base p-1 flex items-center" title="Entenda a Escala FRAIL">
-                                <i class="fas fa-question-circle"></i>
-                            </button>
-                            <div class="criterion-tooltip tooltip-down" style="width: 270px;">
-                                <strong class="block mb-2 text-teal-300 border-b border-slate-600 pb-1">O que é a Escala FRAIL?</strong>
-                                É um instrumento rápido de rastreio para a <strong>Síndrome de Fragilidade</strong> em idosos. O nome é um acrônimo:<br>
-                                <ul class="mt-2 mb-3 pl-4 list-disc text-slate-200 text-left">
-                                    <li><strong class="text-white">F</strong>atigue (Fadiga)</li>
-                                    <li><strong class="text-white">R</strong>esistance (Subir escadas)</li>
-                                    <li><strong class="text-white">A</strong>mbulation (Caminhar)</li>
-                                    <li><strong class="text-white">I</strong>llnesses (> 5 doenças)</li>
-                                    <li><strong class="text-white">L</strong>oss of weight (Perda de peso)</li>
-                                </ul>
-                                <div class="bg-slate-900 p-2 rounded-lg text-center text-[10px] md:text-xs border border-slate-700">
-                                    <span class="text-emerald-400 font-bold">0:</span> Robusto <span class="text-slate-500 mx-1">|</span> 
-                                    <span class="text-yellow-400 font-bold">1-2:</span> Pré-frágil <span class="text-slate-500 mx-1">|</span> 
-                                    <span class="text-red-400 font-bold">3-5:</span> Frágil
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-2 text-xs md:text-sm font-medium text-teal-800 w-full">
-                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
-                            <input type="checkbox" id="fr-1" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
-                            <span class="leading-tight">Fadiga (Cansado a maior parte do tempo?)</span>
-                        </label>
-                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
-                            <input type="checkbox" id="fr-2" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
-                            <span class="leading-tight">Resistência (Dificuldade de subir 1 lance de escadas?)</span>
-                        </label>
-                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
-                            <input type="checkbox" id="fr-3" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
-                            <span class="leading-tight">Deambulação (Dificuldade de andar 1 quarteirão?)</span>
-                        </label>
-                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
-                            <input type="checkbox" id="fr-4" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
-                            <span class="leading-tight">Comorbidades (Possui 5 ou mais doenças?)</span>
-                        </label>
-                        <label class="flex items-center space-x-3 bg-white p-3 rounded-lg border border-teal-100 shadow-sm cursor-pointer hover:bg-teal-50 transition-colors">
-                            <input type="checkbox" id="fr-5" class="w-5 h-5 accent-teal-600 flex-shrink-0" onchange="calcFRAIL()"> 
-                            <span class="leading-tight">Perda de Peso (> 5% nos últimos 6 meses?)</span>
-                        </label>
-                    </div>
-
-                    <div class="mt-4 bg-teal-600 text-white p-4 rounded-2xl flex justify-between items-center shadow-lg w-full">
-                        <span class="font-black text-lg md:text-xl">TOTAL: <span id="res-frail">0</span></span>
-                        <span id="frail-interp" class="bg-white text-teal-700 px-3 py-1 rounded-lg text-xs md:text-sm uppercase font-bold text-center">Robusto</span>
-                    </div>
-                </div>
-
-
-                <div class="bg-fuchsia-50 rounded-3xl border-2 border-fuchsia-100 p-4 md:p-6 shadow-sm w-full">
-                    <h3 class="font-black text-xl text-fuchsia-900 mb-4 border-b border-fuchsia-200 pb-2"><i class="fas fa-child mr-2"></i>SARC-CalF (Rastreio Sarcopenia)</h3>
-                    
-                    <div class="grid grid-cols-2 gap-3 mb-4 w-full">
-                        <div class="bg-white p-2 rounded-xl border border-fuchsia-100 shadow-sm">
-                            <label class="block text-[10px] md:text-xs font-bold text-fuchsia-800 uppercase mb-1">Sexo</label>
-                            <select id="sarc-sexo" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
-                                <option value="F">Feminino</option>
-                                <option value="M">Masculino</option>
-                            </select>
-                        </div>
-                        <div class="bg-white p-2 rounded-xl border border-fuchsia-100 shadow-sm">
-                            <label class="block text-[10px] md:text-xs font-bold text-fuchsia-800 uppercase mb-1">Circ. Panturrilha (cm)</label>
-                            <input type="number" id="sarc-cp" placeholder="Ex: 32" class="w-full min-w-0 p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-center text-slate-700 outline-none focus:border-fuchsia-400" oninput="calcSarcF()">
-                        </div>
-                    </div>
-
-                    <div class="space-y-3 w-full">
-                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
-                            <label class="block mb-2">
-                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">1. Força</strong>
-                                <span class="text-slate-600 font-medium text-xs md:text-sm">O quanto de dificuldade você tem para levantar e carregar 5kg?</span>
-                            </label>
-                            <select id="sarc-1" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
-                                <option value="0">Nenhuma (0)</option>
-                                <option value="1">Alguma (1)</option>
-                                <option value="2">Muita / Não consegue (2)</option>
-                            </select>
-                        </div>
-
-                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
-                            <label class="block mb-2">
-                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">2. Ajuda para caminhar</strong>
-                                <span class="text-slate-600 font-medium text-xs md:text-sm">O quanto de dificuldade você tem para atravessar um cômodo?</span>
-                            </label>
-                            <select id="sarc-2" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
-                                <option value="0">Nenhuma (0)</option>
-                                <option value="1">Alguma (1)</option>
-                                <option value="2">Muita / Usa apoios / Incapaz (2)</option>
-                            </select>
-                        </div>
-
-                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
-                            <label class="block mb-2">
-                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">3. Levantar da cadeira</strong>
-                                <span class="text-slate-600 font-medium text-xs md:text-sm">O quanto de dificuldade você tem para levantar de uma cama ou cadeira?</span>
-                            </label>
-                            <select id="sarc-3" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
-                                <option value="0">Nenhuma (0)</option>
-                                <option value="1">Alguma (1)</option>
-                                <option value="2">Muita / Não consegue sem ajuda (2)</option>
-                            </select>
-                        </div>
-
-                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
-                            <label class="block mb-2">
-                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">4. Subir escadas</strong>
-                                <span class="text-slate-600 font-medium text-xs md:text-sm">O quanto de dificuldade você tem para subir um lance de escadas de 10 degraus?</span>
-                            </label>
-                            <select id="sarc-4" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
-                                <option value="0">Nenhuma (0)</option>
-                                <option value="1">Alguma (1)</option>
-                                <option value="2">Muita / Não consegue (2)</option>
-                            </select>
-                        </div>
-
-                        <div class="bg-white p-3 md:p-4 rounded-xl border border-fuchsia-100 shadow-sm w-full">
-                            <label class="block mb-2">
-                                <strong class="text-fuchsia-800 uppercase block text-xs md:text-sm">5. Quedas</strong>
-                                <span class="text-slate-600 font-medium text-xs md:text-sm">Quantas vezes você caiu no último ano?</span>
-                            </label>
-                            <select id="sarc-5" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg font-bold text-slate-700 outline-none focus:border-fuchsia-400" onchange="calcSarcF()">
-                                <option value="0">Nenhuma (0)</option>
-                                <option value="1">1 a 3 quedas (1)</option>
-                                <option value="2">4 ou mais quedas (2)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 bg-white p-4 rounded-2xl shadow-inner text-center border border-fuchsia-100 w-full min-w-0">
-                        <span class="block text-[10px] md:text-xs font-bold text-slate-500 uppercase mb-1">Somatório Final</span>
-                        <div class="text-3xl md:text-4xl font-black text-fuchsia-600 mb-2"><span id="sarc-result">0</span> <span class="text-sm text-slate-400">/ 20</span></div>
-                        <div id="sarc-interp" class="text-xs md:text-[13px] font-black bg-emerald-100 text-emerald-700 py-2 px-3 rounded-xl uppercase tracking-wider text-center truncate w-full transition-colors">
-                            Sem sinais sugestivos (< 11)
-                        </div>
-                    </div>
-                </div>
-</div> 
-        </div> 
-
+            <p class="text-[9px] md:text-[10px] text-blue-500 mt-3 italic text-center">*Ponto de corte para maior risco de quedas em idosos comunitários: > 12 segundos.</p>
+        </div>
+    </div> 
+</div>
                           <div id="tab-respiratorio" class="tab-content hidden">
             <h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-lungs text-sky-500 mr-3"></i>Avaliação Respiratória</h2>
             
@@ -894,7 +913,8 @@
                 <button onclick="switchRespTab('resp-forca')" class="resp-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">PiMáx, PeMáx & Peak Flow</button>
                 <button onclick="switchRespTab('resp-espiro')" class="resp-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Espirometria</button>
                 <button onclick="switchRespTab('resp-cirto')" class="resp-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Cirtometria</button>
-            </div>
+          	<button onclick="switchRespTab('resp-vmi')" class="resp-tab-btn flex-1 min-w-[100px] bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-orange-100 transition-all">    <i class="fas fa-microchip mr-1"></i>VMI & ROX</button>
+</div>
 
             <div id="resp-guia" class="resp-tab-content active grid md:grid-cols-2 gap-6 w-full max-w-full">
                 
@@ -970,11 +990,11 @@
                         </div>
                     </div>
                     
-                    <div class="mt-4 bg-sky-600 text-white p-4 rounded-xl shadow-md border-l-4 border-yellow-300 w-full min-w-0">
+                              <div class="mt-4 bg-sky-600 text-white p-4 rounded-xl shadow-md border-l-4 border-yellow-300 w-full min-w-0">
                         <span class="block text-[10px] font-bold uppercase opacity-80 mb-1">Evolução Pronta (Copie para o prontuário):</span>
                         <div id="ausc-resultado" class="text-xs md:text-sm font-medium italic select-all cursor-pointer">Ausculta Pulmonar: SP presentes e simétricos, sem ruídos adventícios.</div>
                     </div>
-                </div>
+                </div> </div> <div id="resp-forca" class="resp-tab-content hidden grid md:grid-cols-2 gap-4 md:gap-6 w-full max-w-full">
 <div class="bg-purple-50 rounded-3xl border-2 border-purple-100 p-4 md:p-6 shadow-sm w-full">
     <div class="flex items-center mb-4 border-b border-purple-200 pb-2 relative z-20 w-full">
         <h3 class="font-black text-xl text-purple-900"><i class="fas fa-compress-arrows-alt mr-2"></i>Manovacuometria (Neder)</h3>
@@ -1035,8 +1055,8 @@
                         <div class="text-3xl md:text-4xl font-black text-emerald-600 mb-2 truncate"><span id="pf-porcentagem">0</span>%</div>
                         <div id="pf-zona" class="text-xs md:text-sm font-black bg-slate-100 text-slate-500 py-2 px-3 rounded-xl uppercase tracking-wider truncate w-full">Aguardando</div>
                     </div>
-                </div>
-            </div> <div id="resp-espiro" class="resp-tab-content hidden w-full max-w-full">
+                </div> </div> <div id="resp-espiro" class="resp-tab-content hidden w-full max-w-full">
+
                 <div class="bg-blue-50 rounded-3xl border-2 border-blue-100 p-4 md:p-6 shadow-sm w-full">
                     <h3 class="font-black text-xl text-blue-900 mb-4 border-b border-blue-200 pb-2"><i class="fas fa-lungs-virus mr-2"></i>Espirometria (GLI-2012)</h3>
                     
@@ -1109,20 +1129,51 @@
                             <div id="cirto-xi-interp" class="w-full md:w-32 text-center text-[10px] font-bold uppercase py-2 rounded-lg bg-slate-100 text-slate-400">---</div>
                         </div>
 
-                        <div class="bg-white p-3 md:p-4 rounded-xl shadow-sm border border-rose-100 flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full">
+                                          <div class="bg-white p-3 md:p-4 rounded-xl shadow-sm border border-rose-100 flex flex-col md:flex-row items-center gap-2 md:gap-4 w-full">
                             <span class="font-black text-rose-800 w-full md:w-24 text-center md:text-left text-sm md:text-base">Umbilical</span>
                             <div class="flex gap-2 w-full flex-1">
                                 <input type="number" id="cirto-um-insp" placeholder="Insp(cm)" class="w-full min-w-0 flex-1 p-2 border-2 border-rose-100 rounded-lg text-sm text-center outline-none focus:border-rose-400" oninput="calcCirto()">
                                 <input type="number" id="cirto-um-exp" placeholder="Exp(cm)" class="w-full min-w-0 flex-1 p-2 border-2 border-rose-100 rounded-lg text-sm text-center outline-none focus:border-rose-400" oninput="calcCirto()">
                             </div>
                             <div class="w-full md:w-32 text-center bg-rose-50 rounded-lg p-2 font-black text-rose-600 text-sm md:text-base truncate">Amp: <span id="cirto-um-amp">0</span> cm</div>
-                            <div id="cirto-um-interp" class="w-full md:w-32 text-center text-[10px] font-bold uppercase py-2 rounded-lg bg-slate-100 text-slate-400">---</div>
+                                                  <div id="cirto-um-interp" class="w-full md:w-32 text-center text-[10px] font-bold uppercase py-2 rounded-lg bg-slate-100 text-slate-400">---</div>
+                        </div>
+                    </div> 
+                </div> 
+            </div> <div id="resp-vmi" class="resp-tab-content hidden grid md:grid-cols-2 gap-6 w-full max-w-full">                     
+                <div class="bg-orange-50 rounded-3xl border-2 border-orange-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-orange-900 mb-4 border-b border-orange-200 pb-2"><i class="fas fa-lungs mr-2"></i>VM: Peso Predito</h3>
+                    <div class="flex gap-2 md:gap-3 mb-4 text-sm w-full">
+                        <select id="calc-sexo" class="w-full min-w-0 flex-1 p-2 border-2 border-orange-200 rounded-xl font-bold text-orange-800 outline-none" onchange="calcPeso()">
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                        </select>
+                        <input type="number" id="calc-altura" value="170" class="w-full min-w-0 flex-1 p-2 border-2 border-orange-200 rounded-xl font-bold text-center outline-none" oninput="calcPeso()">
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center w-full">
+                        <div class="text-3xl font-black text-orange-600 mb-2 truncate"><span id="res-peso">66.3</span> <span class="text-lg">kg</span></div>
+                        <div class="grid grid-cols-3 gap-1 md:gap-2 text-xs border-t pt-2 w-full">
+                            <div class="truncate"><strong id="res-vc4" class="text-slate-700 text-sm md:text-base block">265</strong>4 ml/kg</div>
+                            <div class="truncate"><strong id="res-vc6" class="text-emerald-600 text-sm md:text-base block">398</strong>6 ml/kg</div>
+                            <div class="truncate"><strong id="res-vc8" class="text-slate-700 text-sm md:text-base block">530</strong>8 ml/kg</div>
                         </div>
                     </div>
                 </div>
-            </div> </div> 
-            
-        </div>   <div id="tab-outros" class="tab-content hidden">
+                
+                <div class="bg-blue-50 rounded-3xl border-2 border-blue-100 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-blue-900 mb-4 border-b border-blue-200 pb-2"><i class="fas fa-wind mr-2"></i>Índice ROX</h3>
+                    <div class="grid grid-cols-3 gap-2 md:gap-3 mb-4 text-sm w-full">
+                        <input type="number" id="rox-spo2" placeholder="SpO2 %" class="w-full min-w-0 p-2 border-2 border-blue-200 rounded-xl font-bold text-center outline-none" oninput="calcROX()">
+                        <input type="number" id="rox-fio2" placeholder="FiO2 %" class="w-full min-w-0 p-2 border-2 border-blue-200 rounded-xl font-bold text-center outline-none" oninput="calcROX()">
+                        <input type="number" id="rox-fr" placeholder="FR" class="w-full min-w-0 p-2 border-2 border-blue-200 rounded-xl font-bold text-center outline-none" oninput="calcROX()">
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center flex flex-col justify-center items-center gap-3 w-full">
+                        <div class="text-4xl font-black text-blue-600 truncate"><span id="res-rox">0.00</span></div>
+                        <div id="rox-interp" class="text-xs md:text-sm font-bold bg-slate-100 text-slate-500 py-2 px-3 rounded-xl w-full text-center truncate">Aguardando dados</div>
+                    </div>
+                </div>
+            </div> 
+         </div>  </div>   <div id="tab-outros" class="tab-content hidden">
             <h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-layer-group text-fuchsia-500 mr-3"></i>Módulo Extras</h2>
           
             <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
@@ -1171,150 +1222,122 @@
                                 <div class="w-16 font-black text-rose-700">S1-S5</div>
                                 <div class="flex-1 text-rose-900 font-medium"><strong>S1:</strong> Borda lateral do pé. <strong>S2:</strong> Fossa poplítea. <strong>S3-S5:</strong> Região perineal ("Sela").</div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
             </div>
-            
-        <div id="tab-outros" class="tab-content hidden">
-            <h2 class="text-3xl font-black text-slate-800 mb-6 flex items-center"><i class="fas fa-layer-group text-fuchsia-500 mr-3"></i>Módulo Extras</h2>
-          
-            <div class="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
-                <button onclick="switchExtrasTab('extras-neuro')" class="extras-tab-btn flex-1 bg-fuchsia-600 text-white px-3 py-3 rounded-xl text-xs md:text-sm font-bold shadow-md transition-all">Miótomos & Dermátomos</button>
-                <button onclick="switchExtrasTab('extras-sna')" class="extras-tab-btn flex-1 bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Anatomia SNA</button>
-                <button onclick="switchExtrasTab('extras-tampa')" class="extras-tab-btn flex-1 bg-slate-100 text-slate-600 px-3 py-3 rounded-xl text-xs md:text-sm font-bold hover:bg-slate-200 transition-all">Escala de Tampa</button>
-            </div>
+                               <div id="extras-sna" class="extras-tab-content hidden w-full max-w-full space-y-6">
 
-            <div id="extras-neuro" class="extras-tab-content active grid md:grid-cols-2 gap-6 w-full max-w-full">
-                <div class="bg-purple-50 rounded-3xl border-2 border-purple-100 p-6 shadow-sm">
-                    <h3 class="font-black text-xl text-purple-900 mb-4 border-b border-purple-200 pb-2"><i class="fas fa-running mr-2"></i>Miótomos (Raiz e Teste)</h3>
-                    <div class="space-y-2 text-xs font-medium text-purple-900">
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C5</strong> <span>Abdução do Ombro</span></div>
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C6</strong> <span>Flexão de Cotovelo / Ext. Punho</span></div>
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C7</strong> <span>Extensão de Cotovelo / Flex. Punho</span></div>
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">C8</strong> <span>Flexão dos Dedos / Ext. Polegar</span></div>
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">T1</strong> <span>Abdução dos Dedos</span></div>
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between mt-4"><strong class="w-10 text-purple-700">L2</strong> <span>Flexão de Quadril</span></div>
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">L3</strong> <span>Extensão de Joelho</span></div>
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">L4</strong> <span>Dorsiflexão do Tornozelo</span></div>
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">L5</strong> <span>Extensão do Hálux</span></div>
-                        <div class="bg-white p-3 rounded-xl shadow-sm border border-purple-100 flex justify-between"><strong class="w-10 text-purple-700">S1</strong> <span>Flexão Plantar (Eversão)</span></div>
-                    </div>
-                </div>
-                <div class="bg-indigo-50 rounded-3xl border-2 border-indigo-100 p-6 shadow-sm flex flex-col">
-                    <h3 class="font-black text-xl text-indigo-900 mb-4 border-b border-indigo-200 pb-2"><i class="fas fa-male mr-2"></i>Mapa de Dermátomos (Zonas)</h3>
-                    <div class="flex-1 bg-white rounded-xl shadow-sm border border-indigo-100 p-4">
-                        <div class="space-y-3 w-full text-xs md:text-sm">
-                            <div class="flex items-center border-l-4 border-blue-500 bg-blue-50 p-3 rounded-r-lg shadow-sm">
-                                <div class="w-16 font-black text-blue-700">C2-C4</div>
-                                <div class="flex-1 text-blue-900 font-medium">Nuca, pescoço e região clavicular ("colar" cervical).</div>
+                <div class="bg-orange-50 rounded-3xl border-2 border-orange-200 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-orange-900 mb-4 border-b border-orange-300 pb-2 flex items-center">
+                        <i class="fas fa-fire text-orange-600 mr-2"></i>Simpático (Eixo Toracolombar)
+                    </h3>
+                    
+                    <div class="space-y-3 w-full text-xs md:text-sm">
+                        
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-orange-100 shadow-sm border-l-4 border-l-orange-500">
+                            <div class="flex items-center gap-2 mb-2 border-b border-slate-50 pb-2">
+                                <span class="bg-orange-100 text-orange-800 font-black px-2 py-1 rounded-md text-[10px] md:text-xs">T1 - T4</span>
+                                <span class="font-bold text-slate-700 uppercase">Gânglios Cervicais (Sup/Méd/Inf) e Torácicos Altos</span>
                             </div>
-                            <div class="flex items-center border-l-4 border-purple-500 bg-purple-50 p-3 rounded-r-lg shadow-sm">
-                                <div class="w-16 font-black text-purple-700">C5-T1</div>
-                                <div class="flex-1 text-purple-900 font-medium"><strong>C5:</strong> Ombro lateral. <strong>C6:</strong> Polegar. <strong>C7:</strong> Dedo médio. <strong>C8:</strong> Dedo mínimo. <strong>T1:</strong> Antebraço medial.</div>
-                            </div>
-                            <div class="flex items-center border-l-4 border-emerald-500 bg-emerald-50 p-3 rounded-r-lg shadow-sm">
-                                <div class="w-16 font-black text-emerald-700">T4-T12</div>
-                                <div class="flex-1 text-emerald-900 font-medium"><strong>T4:</strong> Linha dos mamilos. <strong>T10:</strong> Cicatriz umbilical. <strong>T12:</strong> Região suprapúbica.</div>
-                            </div>
-                            <div class="flex items-center border-l-4 border-orange-500 bg-orange-50 p-3 rounded-r-lg shadow-sm">
-                                <div class="w-16 font-black text-orange-700">L1-L5</div>
-                                <div class="flex-1 text-orange-900 font-medium"><strong>L1:</strong> Virilha. <strong>L3:</strong> Joelho medial. <strong>L4:</strong> Maléolo medial. <strong>L5:</strong> Dorso do pé / Hálux.</div>
-                            </div>
-                            <div class="flex items-center border-l-4 border-rose-500 bg-rose-50 p-3 rounded-r-lg shadow-sm">
-                                <div class="w-16 font-black text-rose-700">S1-S5</div>
-                                <div class="flex-1 text-rose-900 font-medium"><strong>S1:</strong> Borda lateral do pé. <strong>S2:</strong> Fossa poplítea. <strong>S3-S5:</strong> Região perineal ("Sela").</div>
-                            </div>
+                            <p class="text-slate-600 mb-1"><strong class="text-orange-900">Vísceras:</strong> Olho, Glândulas salivares e lacrimais, Coração, Pulmões, Vasos de Cabeça/Pescoço.</p>
+                            <p class="text-slate-500 italic"><strong class="text-orange-700 not-italic">Ação:</strong> Midríase, taquicardia, broncodilatação, sudorese, vasoconstrição periférica.</p>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <div id="extras-sna" class="extras-tab-content hidden grid md:grid-cols-2 gap-6 w-full max-w-full">
-                
-                <div class="bg-rose-50 rounded-3xl border-2 border-rose-100 p-4 md:p-6 shadow-sm flex flex-col max-h-[600px] w-full">
-                    <h3 class="font-black text-xl text-rose-900 mb-4 border-b border-rose-200 pb-2 flex-shrink-0"><i class="fas fa-fire mr-2"></i>Simpático (Tóraco-Lombar)</h3>
-                    <div class="overflow-y-auto pr-2 custom-scrollbar space-y-3 text-xs md:text-sm">
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-rose-100">
-                            <strong class="block text-rose-800 text-sm uppercase mb-1">Gânglios Cervicais (Sup, Médio e Estrelado)</strong>
-                            <p class="text-slate-600 mb-2"><span class="font-bold text-rose-600">Origem Real:</span> Segmentos medulares <strong>T1 a T4</strong>. As fibras pré-ganglionares <em>sobem</em> pela cadeia laterovertebral para fazer sinapse nos gânglios cervicais.</p>
-                            <p class="text-slate-600 mb-2"><span class="font-bold text-rose-600">Inerva:</span> Olho (midríase), glândulas (inibe secreção) e compõe o plexo cardíaco/pulmonar.</p>
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-orange-100 shadow-sm border-l-4 border-l-orange-500">
+                            <div class="flex items-center gap-2 mb-2 border-b border-slate-50 pb-2">
+                                <span class="bg-orange-100 text-orange-800 font-black px-2 py-1 rounded-md text-[10px] md:text-xs">T5 - T9</span>
+                                <span class="font-bold text-slate-700 uppercase">Gânglio Celíaco (N. Esplâncnico Maior)</span>
+                            </div>
+                            <p class="text-slate-600 mb-1"><strong class="text-orange-900">Vísceras:</strong> Estômago, Fígado, Vesícula Biliar, Baço, Pâncreas, Duodeno.</p>
+                            <p class="text-slate-500 italic"><strong class="text-orange-700 not-italic">Ação:</strong> Inibição da peristalse e secreção gástrica, vasoconstrição esplâncnica, glicogenólise.</p>
                         </div>
-                        <div class="bg-rose-100 p-4 rounded-xl shadow-sm border-2 border-rose-300">
-                            <strong class="block text-rose-900 text-sm uppercase mb-2"><i class="fas fa-heartbeat mr-1"></i> Coração (Plexo Cardíaco Simpático)</strong>
-                            <ul class="list-disc pl-4 space-y-1 text-rose-800 font-medium">
-                                <li><strong>Via:</strong> Fibras pós-ganglionares dos gânglios cervicais e torácicos superiores (T1-T4/T5).</li>
-                                <li><strong>Alvos:</strong> Nodo Sinoatrial (SA), Nodo Atrioventricular (AV) e <strong>Miocárdio Ventricular</strong> (abundante).</li>
-                                <li><strong>Efeito:</strong> <span class="font-bold">Cronotropismo +</span> (aumenta FC no SA), <span class="font-bold">Dromotropismo +</span> (acelera condução no AV) e <span class="font-bold">Inotropismo +</span> (aumenta força ventricular).</li>
-                            </ul>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-orange-100 shadow-sm border-l-4 border-l-orange-500">
+                            <div class="flex items-center gap-2 mb-2 border-b border-slate-50 pb-2">
+                                <span class="bg-orange-100 text-orange-800 font-black px-2 py-1 rounded-md text-[10px] md:text-xs">T10 - T11</span>
+                                <span class="font-bold text-slate-700 uppercase">Gânglio Mesentérico Sup. (N. Esplâncnico Menor)</span>
+                            </div>
+                            <p class="text-slate-600 mb-1"><strong class="text-orange-900">Vísceras:</strong> Intestino Delgado, Cólon Ascendente/Transverso, Rins, Gônadas.</p>
+                            <p class="text-slate-500 italic"><strong class="text-orange-700 not-italic">Ação:</strong> Redução da motilidade intestinal, contração de esfíncteres, vasoconstrição renal (liberação de renina).</p>
                         </div>
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-rose-100">
-                            <strong class="block text-rose-800 text-sm uppercase mb-1">Nervos Esplâncnicos (T5 - L2)</strong>
-                            <p class="text-slate-600 mb-2"><span class="font-bold text-rose-600">Gânglios Pré-aórticos:</span> Celíaco, Mesentérico Superior e Inferior.</p>
-                            <p class="text-slate-700 font-bold bg-rose-50 p-2 rounded-lg">Função: Vasoconstrição esplâncnica, glicogenólise hepática, contração de esfíncteres GI e urinários, inibição do peristaltismo.</p>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-orange-100 shadow-sm border-l-4 border-l-orange-500">
+                            <div class="flex items-center gap-2 mb-2 border-b border-slate-50 pb-2">
+                                <span class="bg-orange-100 text-orange-800 font-black px-2 py-1 rounded-md text-[10px] md:text-xs">T12 - L2</span>
+                                <span class="font-bold text-slate-700 uppercase">Gânglios Aórticorrenal e Mesentérico Inf.</span>
+                            </div>
+                            <p class="text-slate-600 mb-1"><strong class="text-orange-900">Vísceras:</strong> Cólon Descendente, Reto, Bexiga, Órgãos Pélvicos, Adrenais.</p>
+                            <p class="text-slate-500 italic"><strong class="text-orange-700 not-italic">Ação:</strong> Relaxamento do detrusor, contração do esfíncter uretral/anal, ejaculação, liberação de adrenalina.</p>
                         </div>
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-rose-100 border-l-4 border-l-rose-600">
-                            <strong class="block text-rose-800 text-sm uppercase mb-1">Gânglio Ímpar (ou Gânglio de Walther)</strong>
-                            <p class="text-slate-600"><span class="font-bold text-rose-600">Localização:</span> Anterior à junção sacrococcígea. É o ponto final onde os dois troncos simpáticos (D e E) se fundem.</p>
-                            <p class="text-slate-700 font-bold bg-rose-50 p-2 rounded-lg mt-2">Inerva: Períneo, porção distal do reto, canal anal e genitália (tônus vascular).</p>
-                        </div>
+
                     </div>
                 </div>
 
-                <div class="bg-teal-50 rounded-3xl border-2 border-teal-100 p-4 md:p-6 shadow-sm flex flex-col max-h-[600px] w-full">
-                    <h3 class="font-black text-xl text-teal-900 mb-4 border-b border-teal-200 pb-2 flex-shrink-0"><i class="fas fa-leaf mr-2"></i>Parassimpático (Crânio-Sacral)</h3>
-                    <div class="overflow-y-auto pr-2 custom-scrollbar space-y-3 text-xs md:text-sm">
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-teal-100">
-                            <strong class="block text-teal-800 text-sm uppercase mb-1">Pares Cranianos (Tronco Encefálico)</strong>
-                            <p class="text-slate-600 mb-1"><span class="font-bold text-teal-600">NC III (G. Ciliar):</span> Miose pupilar e acomodação do cristalino.</p>
-                            <p class="text-slate-600 mb-1"><span class="font-bold text-teal-600">NC VII (G. Pterigopalatino/Submandibular):</span> Lacrimejamento e salivação.</p>
-                            <p class="text-slate-600"><span class="font-bold text-teal-600">NC IX (G. Ótico):</span> Salivação parotídea.</p>
+                <div class="bg-teal-50 rounded-3xl border-2 border-teal-200 p-4 md:p-6 shadow-sm w-full">
+                    <h3 class="font-black text-xl text-teal-900 mb-4 border-b border-teal-300 pb-2 flex items-center">
+                        <i class="fas fa-leaf text-teal-600 mr-2"></i>Parassimpático (Eixo Craniossacral)
+                    </h3>
+                    
+                    <div class="space-y-3 w-full text-xs md:text-sm">
+                        
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-teal-100 shadow-sm border-l-4 border-l-teal-500">
+                            <div class="flex items-center gap-2 mb-2 border-b border-slate-50 pb-2">
+                                <span class="bg-teal-100 text-teal-800 font-black px-2 py-1 rounded-md text-[10px] md:text-xs">NC III, VII, IX</span>
+                                <span class="font-bold text-slate-700 uppercase">Gânglios Ciliar, Pterigopalatino, Submandibular, Ótico</span>
+                            </div>
+                            <p class="text-slate-600 mb-1"><strong class="text-teal-900">Vísceras:</strong> Olho, Glândulas Lacrimais e Salivares.</p>
+                            <p class="text-slate-500 italic"><strong class="text-teal-700 not-italic">Ação:</strong> Miose (constrição pupilar), acomodação visual, lacrimejamento, intensa salivação aquosa.</p>
                         </div>
-                        <div class="bg-teal-100 p-4 rounded-xl shadow-sm border-2 border-teal-300">
-                            <strong class="block text-teal-900 text-sm uppercase mb-2"><i class="fas fa-heartbeat mr-1"></i> Coração (Nervo Vago - NC X)</strong>
-                            <ul class="list-disc pl-4 space-y-1 text-teal-800 font-medium">
-                                <li><strong>Via:</strong> Fibras pré-ganglionares do Vago fazem sinapse em gânglios na própria parede cardíaca.</li>
-                                <li><strong>Alvos Específicos:</strong> O Vago Direito inerva predominantemente o <strong>Nodo SA</strong>. O Vago Esquerdo inerva predominantemente o <strong>Nodo AV</strong>. *(Há pouquíssima inervação vagal nos ventrículos).*</li>
-                                <li><strong>Efeito:</strong> <span class="font-bold">Cronotropismo -</span> (bradicardia no SA) e <span class="font-bold">Dromotropismo -</span> (atraso da condução no AV para enchimento ventricular).</li>
-                            </ul>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-teal-100 shadow-sm border-l-4 border-l-teal-500">
+                            <div class="flex items-center gap-2 mb-2 border-b border-slate-50 pb-2">
+                                <span class="bg-teal-100 text-teal-800 font-black px-2 py-1 rounded-md text-[10px] md:text-xs">NC X</span>
+                                <span class="font-bold text-slate-700 uppercase">Nervo Vago (Gânglios Intramurais)</span>
+                            </div>
+                            <p class="text-slate-600 mb-1"><strong class="text-teal-900">Vísceras:</strong> Coração, Pulmões, Esôfago, Estômago, Intestino Delgado e Cólon até a Flexura Esplênica.</p>
+                            <p class="text-slate-500 italic"><strong class="text-teal-700 not-italic">Ação:</strong> Bradicardia, broncoconstrição, aumento intenso da peristalse, secreção gástrica e relaxamento de esfíncteres.</p>
                         </div>
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-teal-100">
-                            <strong class="block text-teal-800 text-sm uppercase mb-1">Vísceras Torácicas e Abdominais (Vago)</strong>
-                            <p class="text-slate-700 font-bold bg-teal-50 p-2 rounded-lg">Função: Broncoconstrição, aumento de secreção brônquica, estimula peristaltismo e secreção gástrica/pancreática (até flexura esplênica do cólon).</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl shadow-sm border border-teal-100">
-                            <strong class="block text-teal-800 text-sm uppercase mb-1">Pélvico (S2 a S4 - N. Esplâncnicos Pélvicos)</strong>
-                            <p class="text-slate-600"><span class="font-bold text-teal-600">Inerva:</span> Cólon descendente, sigmoide, reto, bexiga e genitália.</p>
-                            <p class="text-slate-700 font-bold bg-teal-50 p-2 rounded-lg mt-2">Função: Contrai músculo detrusor (micção), relaxa esfíncter interno, promove ereção (vasodilatação).</p>
+
+                        <div class="bg-white p-3 md:p-4 rounded-xl border border-teal-100 shadow-sm border-l-4 border-l-teal-500">
+                            <div class="flex items-center gap-2 mb-2 border-b border-slate-50 pb-2">
+                                <span class="bg-teal-100 text-teal-800 font-black px-2 py-1 rounded-md text-[10px] md:text-xs">S2 - S4</span>
+                                <span class="font-bold text-slate-700 uppercase">Nervos Esplâncnicos Pélvicos (Gânglios Intramurais)</span>
+                            </div>
+                            <p class="text-slate-600 mb-1"><strong class="text-teal-900">Vísceras:</strong> Cólon Descendente, Reto, Bexiga, Órgãos Genitais.</p>
+                            <p class="text-slate-500 italic"><strong class="text-teal-700 not-italic">Ação:</strong> Contração do detrusor (micção), relaxamento de esfíncteres pélvicos, estímulo da motilidade retal, ereção.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-
+            </div> 
             <div id="extras-tampa" class="extras-tab-content hidden w-full max-w-full">
-                <div class="bg-amber-50 rounded-3xl border-2 border-amber-100 p-4 md:p-6 shadow-sm w-full">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-amber-200 pb-4 w-full">
-                        <div>
-                            <h3 class="font-black text-2xl text-amber-900"><i class="fas fa-running mr-2 text-amber-600"></i>Escala de Tampa (TSK-17)</h3>
-                            <p class="text-[10px] md:text-xs text-amber-700 font-bold uppercase mt-1">Avaliação de Cinesiofobia (Medo do Movimento)</p>
+                <div class="bg-blue-50 rounded-3xl border-2 border-blue-100 p-4 md:p-6 shadow-sm w-full max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between mb-4 border-b border-blue-200 pb-2">
+                        <h3 class="font-black text-xl text-blue-900"><i class="fas fa-clipboard-list mr-2"></i>Escala de Tampa (Cinesiofobia)</h3>
+                    </div>
+                    
+                    <div class="bg-white p-3 md:p-5 rounded-2xl shadow-sm border border-blue-100 mb-6">
+                        <div class="text-[10px] md:text-xs text-slate-500 mb-3 font-bold uppercase flex justify-between border-b border-slate-100 pb-2">
+                            <span>1 = Discordo Totalmente</span>
+                            <span>4 = Concordo Totalmente</span>
                         </div>
-                        <div class="mt-4 md:mt-0 bg-amber-600 text-white px-4 py-3 rounded-2xl flex items-center shadow-lg w-full md:w-auto justify-center">
-                            <span class="font-black uppercase text-sm mr-2 md:mr-4">Escore:</span>
-                            <span id="tampa-resultado" class="text-2xl md:text-3xl font-black mr-2 md:mr-4">17</span>
-                            <span id="tampa-interp" class="bg-white text-amber-700 px-3 py-1 rounded-lg text-[10px] uppercase font-bold text-center leading-tight">Cinesiofobia<br>Baixa</span>
-                        </div>
+                        
+                        <div id="tampa-questions" class="space-y-2"></div>
                     </div>
 
-                    <div class="bg-white p-3 md:p-4 rounded-2xl shadow-sm border border-amber-100 overflow-y-auto max-h-[400px] custom-scrollbar w-full">
-                        <div class="text-[9px] md:text-[10px] font-bold text-slate-400 flex justify-end mb-2 pr-2">1: Discordo Tot. | 2: Discordo Parc. | 3: Concordo Parc. | 4: Concordo Tot.</div>
-                        <div class="space-y-2 text-xs md:text-sm font-medium text-amber-900 w-full" id="tampa-questions">
-                            </div>
-                        <p class="text-[9px] md:text-[10px] text-amber-600 font-bold mt-4 italic text-center">*As questões 4, 8, 11 e 12 possuem pontuação invertida automaticamente pelo sistema.</p>
+                    <div class="bg-white p-4 rounded-2xl shadow-inner text-center border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-center sm:text-left w-full sm:w-auto">
+                            <span class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Pontuação Total</span>
+                            <div class="text-3xl font-black text-blue-600 truncate"><span id="tampa-resultado">17</span> <span class="text-sm text-slate-400">/ 68</span></div>
+                        </div>
+                        <div id="tampa-interp" class="bg-amber-100 text-amber-700 px-4 py-3 rounded-xl text-xs uppercase font-black text-center w-full sm:w-48 transition-colors shadow-sm">
+                            Cinesiofobia Baixa
+                        </div>
                     </div>
                 </div>
-            </div>
-
-        </div>       
+            </div> 
+     
     </main>
 
     <script>
@@ -2044,10 +2067,161 @@
             interp.innerText = 'Aguardando taps...';
             interp.className = 'text-xs md:text-sm text-slate-400 font-black uppercase transition-colors truncate';
         }
+        // ==========================================
+        // CÁLCULO E CRONÔMETRO DO TUG (Timed Up and Go)
+        // ==========================================
+        let tugInterval;
+        let tugStartTime;
+        let tugRunning = false;
+
+        function startTUG() {
+            if (tugRunning) return;
+            tugRunning = true;
+            
+            // Troca os botões
+            document.getElementById('btn-tug-start').classList.add('hidden');
+            document.getElementById('btn-tug-stop').classList.remove('hidden');
+            
+            // Limpa o input manual para não dar conflito
+            document.getElementById('tug-tempo').value = '';
+            
+            tugStartTime = Date.now();
+            tugInterval = setInterval(updateTUG, 100); // Atualiza a tela a cada 100ms
+        }
+
+        function updateTUG() {
+            let elapsedTime = (Date.now() - tugStartTime) / 1000;
+            document.getElementById('tug-display').innerHTML = elapsedTime.toFixed(1) + '<span class="text-lg text-blue-400">s</span>';
+        }
+
+        function stopTUG() {
+            if (!tugRunning) return;
+            tugRunning = false;
+            clearInterval(tugInterval);
+            
+            // Volta os botões ao normal
+            document.getElementById('btn-tug-stop').classList.add('hidden');
+            document.getElementById('btn-tug-start').classList.remove('hidden');
+            
+            // Pega o tempo final, joga no input e calcula
+            let elapsedTime = (Date.now() - tugStartTime) / 1000;
+            document.getElementById('tug-tempo').value = elapsedTime.toFixed(1);
+            calcTUG(); 
+        }
+
+        function resetTUG() {
+            tugRunning = false;
+            clearInterval(tugInterval);
+            document.getElementById('btn-tug-start').classList.remove('hidden');
+            document.getElementById('btn-tug-stop').classList.add('hidden');
+            document.getElementById('tug-display').innerHTML = '0.0<span class="text-lg text-blue-400">s</span>';
+            document.getElementById('tug-tempo').value = '';
+            
+            // Reseta a caixa de resultado
+            let box = document.getElementById('tug-result-box');
+            document.getElementById('tug-interp').innerText = 'Aguardando dados';
+            box.className = "bg-blue-600 text-white p-4 rounded-2xl shadow-lg w-full text-center transition-colors duration-300";
+        }
+
+        function calcTUG() {
+            // Se a pessoa começar a digitar manualmente, para o cronômetro
+            if (tugRunning) stopTUG();
+
+            let tempo = parseFloat(document.getElementById('tug-tempo').value) || 0;
+            
+            // Se foi digitado, atualiza o displayão também
+            if (tempo > 0) {
+                document.getElementById('tug-display').innerHTML = tempo.toFixed(1) + '<span class="text-lg text-blue-400">s</span>';
+            }
+
+            let interpEl = document.getElementById('tug-interp');
+            let box = document.getElementById('tug-result-box');
+            
+            if (tempo === 0) {
+                interpEl.innerText = "Aguardando dados";
+                box.className = "bg-blue-600 text-white p-4 rounded-2xl shadow-lg w-full text-center transition-colors duration-300";
+                return;
+            }
+
+            // Interpretação baseada em risco de quedas
+            if (tempo <= 10) {
+                interpEl.innerText = "Baixo Risco (Independente)";
+                box.className = "bg-emerald-500 text-white p-4 rounded-2xl shadow-lg w-full text-center transition-colors duration-300";
+            } else if (tempo <= 12) {
+                interpEl.innerText = "Risco Moderado (Atenção)";
+                box.className = "bg-yellow-500 text-white p-4 rounded-2xl shadow-lg w-full text-center transition-colors duration-300";
+            } else if (tempo <= 20) {
+                interpEl.innerText = "Alto Risco de Quedas";
+                box.className = "bg-orange-500 text-white p-4 rounded-2xl shadow-lg w-full text-center transition-colors duration-300";
+            } else {
+                interpEl.innerText = "Mobilidade Prejudicada (Dependente)";
+                box.className = "bg-red-600 text-white p-4 rounded-2xl shadow-lg w-full text-center transition-colors duration-300 animate-pulse";
+            }
+        }
+        
+                // 6. FC, Intensidade de Esforço e Zonas Alvo
+        function calcEsforco() {
+            let i = parseFloat(document.getElementById('fc-idade').value) || 0;
+            let rep = parseFloat(document.getElementById('fc-rep').value) || 0;
+            let atual = parseFloat(document.getElementById('fc-atual').value) || 0;
+
+            // Se o usuário apagar a idade ou repouso, a tabela volta a ficar com "---"
+            if (i === 0 || rep === 0) {
+                document.getElementById('z-leve').innerText = "---";
+                document.getElementById('z-mod').innerText = "---";
+                document.getElementById('z-vig').innerText = "---";
+                document.getElementById('z-max').innerText = "---";
+                document.getElementById('res-fcr').textContent = "0";
+                document.getElementById('fc-interp').innerText = "Aguardando dados";
+                return;
+            }
+
+            // Calcula a Frequência Cardíaca Máxima e de Reserva
+            let fcmax = 220 - i;
+            let fcr = fcmax - rep;
+
+            // 1. PREENCHE A TABELA AUTOMÁTICA DE ZONAS (BPM)
+            let zModMin = Math.round((fcr * 0.40) + rep);
+            let zModMax = Math.round((fcr * 0.59) + rep);
+            let zVigMin = Math.round((fcr * 0.60) + rep);
+            let zVigMax = Math.round((fcr * 0.89) + rep);
+            let zMaxMin = Math.round((fcr * 0.90) + rep);
+
+            document.getElementById('z-leve').innerText = "< " + zModMin + " bpm";
+            document.getElementById('z-mod').innerText = zModMin + " a " + zModMax;
+            document.getElementById('z-vig').innerText = zVigMin + " a " + zVigMax;
+            document.getElementById('z-max').innerText = "≥ " + zMaxMin + " bpm";
+
+            // 2. CALCULA A % DA FC ATUAL (Se a pessoa já estiver se exercitando)
+            if (atual > 0) {
+                let p_fcr = ((atual - rep) / fcr) * 100;
+                document.getElementById('res-fcr').textContent = p_fcr.toFixed(0);
+                
+                let interp = document.getElementById('fc-interp');
+                if(p_fcr < 40) { 
+                    interp.textContent = "Muito Leve / Leve"; 
+                    interp.className = "text-xs md:text-sm font-bold bg-emerald-100 text-emerald-700 py-2 px-3 rounded-xl w-full sm:w-auto truncate"; 
+                } else if(p_fcr < 60) { 
+                    interp.textContent = "Esforço Moderado"; 
+                    interp.className = "text-xs md:text-sm font-bold bg-yellow-100 text-yellow-700 py-2 px-3 rounded-xl w-full sm:w-auto truncate"; 
+                } else if(p_fcr < 90) { 
+                    interp.textContent = "Esforço Vigoroso"; 
+                    interp.className = "text-xs md:text-sm font-bold bg-orange-100 text-orange-700 py-2 px-3 rounded-xl w-full sm:w-auto truncate"; 
+                } else { 
+                    interp.textContent = "Próximo à Máxima!"; 
+                    interp.className = "text-xs md:text-sm font-bold bg-red-100 text-red-700 py-2 px-3 rounded-xl w-full sm:w-auto truncate animate-pulse"; 
+                }
+            } else {
+                // Se só digitou idade e repouso, zera a parte de cima
+                document.getElementById('res-fcr').textContent = "0";
+                let interp = document.getElementById('fc-interp');
+                interp.textContent = "Digite a FC Atual"; 
+                interp.className = "text-xs md:text-sm font-bold bg-slate-100 text-slate-500 py-2 px-3 rounded-xl w-full sm:w-auto truncate";
+            }
+        }
+
 
     </script>
         </body>
 </html>
-
-
  
